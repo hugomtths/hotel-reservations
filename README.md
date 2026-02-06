@@ -88,18 +88,49 @@ Utilização de quadro Scrum para organização e acompanhamento das atividades 
 
 ### Pré-requisitos
 
-* Java 21 ou superior
-* Docker
-* Git
+- Java 21 ou superior
+- Docker
+- Docker Compose
+- Git
 
-### Backend
+### Subindo a aplicação com Docker Compose
+
+Na raiz do projeto, execute:
 
 ```bash
-cd backend
-./mvnw spring-boot:run
+docker compose up --build -d
+````
+
+O comando irá subir o banco de dados PostgreSQL e o backend, além de executar automaticamente as migrations via Flyway.
+
+### Verificando containers em execução
+
+```bash
+docker ps
 ```
 
-A aplicação será iniciada utilizando o método `main()` da classe principal.
+### Acessando o banco de dados
+
+```bash
+docker exec -it hotel-reservations-db-1 psql -U hotel_reservations_dev_app -d hotel_reservations_dev
+```
+
+### Parando a aplicação
+
+```bash
+docker compose down
+```
+
+Para remover os volumes e reiniciar o banco do zero:
+
+```bash
+docker compose down -v
+```
+
+### Serviços disponíveis
+
+* Backend: [http://localhost:8080](http://localhost:8080)
+* Banco de Dados: localhost:5433
 
 ---
 

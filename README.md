@@ -54,6 +54,8 @@ Banco de dados normalizado (mínimo Segunda Forma Normal);
 
 Migrations SQL versionadas utilizando Flyway;
 
+Geração dinâmica de dados realistas para testes utilizando script Python e a biblioteca Faker;
+
 Infraestrutura containerizada com Docker e Docker Compose;
 
 Backend em Java com Spring Boot utilizado para validação do schema via Hibernate;
@@ -79,6 +81,7 @@ Utilização de quadro Scrum para organização e acompanhamento das atividades 
 * Git
 * GitHub
 * Docker
+* Python 3.11 + Faker (geração de dados para povoamento)
 * Conventional Commits
 * Pull Requests com revisão obrigatória
 

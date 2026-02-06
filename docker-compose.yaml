@@ -1,0 +1,46 @@
+name: hotel-reservations
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: hotel_reservations_dev
+      POSTGRES_USER: hotel_reservations_dev_app
+      POSTGRES_PASSWORD: ${HOTEL_RESERVATIONS_DB_PASSWORD}
+      TZ: America/Sao_Paulo
+    ports:
+      - "5433:5432"
+    networks:
+      - internal-net
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hotel_reservations_dev_app -d hotel_reservations_dev"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    image: hotel-reservations-backend
+    build: ./backend
+    ports:
+      - "8080:8080"
+    networks:
+      - public-net
+      - internal-net
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      HOTEL_RESERVATIONS_DB_PASSWORD: ${HOTEL_RESERVATIONS_DB_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
+
+networks:
+  public-net:
+    driver: bridge
+  internal-net:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    driver: local

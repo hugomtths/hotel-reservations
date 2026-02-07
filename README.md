@@ -63,7 +63,7 @@ Abaixo estão representados os modelos desenvolvidos para a estruturação do si
 
 A documentação completa dos metadados, incluindo descrição das tabelas, colunas, tipos de dados e restrições, pode ser consultada no arquivo abaixo:
 
-[Visualizar Dicionário de Dados (PDF)](./docs/database/dicionario_dados.pdf)
+[Visualizar Dicionário de Dados (PDF)](./docs/database/dicionario-de-dados.pdf)
 
 ---
 

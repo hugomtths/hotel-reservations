@@ -46,23 +46,16 @@ O projeto também prevê suporte a serviços adicionais oferecidos pelo hotel, p
 
 ## Estado atual do projeto
 
-Atualmente, o projeto encontra-se na fase de implementação e validação do banco de dados, contendo:
+Atualmente, o projeto encontra-se na fase de **implementação e validação do banco de dados**, contendo:
 
-Esquema lógico relacional implementado em PostgreSQL;
-
-Banco de dados normalizado (mínimo Segunda Forma Normal);
-
-Migrations SQL versionadas utilizando Flyway;
-
-Geração dinâmica de dados realistas para testes utilizando script Python e a biblioteca Faker;
-
-Infraestrutura containerizada com Docker e Docker Compose;
-
-Backend em Java com Spring Boot utilizado para validação do schema via Hibernate;
-
-Organização do repositório, fluxo de contribuição e padrões de versionamento;
-
-Utilização de quadro Scrum para organização e acompanhamento das atividades da equipe.
+- Esquema lógico relacional implementado em PostgreSQL;
+- Banco de dados normalizado (Segunda Forma Normal);
+- Migrations SQL versionadas utilizando Flyway;
+- Geração dinâmica de dados realistas para testes utilizando script Python e a biblioteca Faker;
+- Infraestrutura containerizada com Docker e Docker Compose;
+- Backend em Java com Spring Boot utilizado para validação do schema via Hibernate;
+- Organização do repositório, fluxo de contribuição e padrões de versionamento;
+- Utilização de quadro Scrum para organização e acompanhamento das atividades da equipe.
 
 ---
 

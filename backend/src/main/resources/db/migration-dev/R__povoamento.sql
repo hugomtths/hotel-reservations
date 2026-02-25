@@ -1,10 +1,40 @@
 -- Hotel e Dados Básicos
 INSERT INTO hotel (nome, cnpj) VALUES ('Horizon Luxury Resort', '27164580000109');
-INSERT INTO endereco (hotel_id, cep, rua, numero, bairro, cidade, estado) VALUES (1, '55290000', 'Av. Rui Barbosa', '1000', 'Heliópolis', 'Garanhuns', 'PE');
-INSERT INTO email_hotel (hotel_id, email) VALUES (1, 'reservas@horizon.com.br');
-INSERT INTO email_hotel (hotel_id, email) VALUES (1, 'admin@horizon.com.br');
-INSERT INTO telefone_hotel (hotel_id, telefone) VALUES (1, '8737620000');
-INSERT INTO telefone_hotel (hotel_id, telefone) VALUES (1, '87999998888');
+
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+)
+INSERT INTO endereco (hotel_id, cep, rua, numero, bairro, cidade, estado)
+SELECT id, '55290000', 'Av. Rui Barbosa', '1000', 'Heliópolis', 'Garanhuns', 'PE'
+FROM hotel_base;
+
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+)
+INSERT INTO email_hotel (hotel_id, email)
+SELECT id, 'reservas@horizon.com.br'
+FROM hotel_base;
+
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+)
+INSERT INTO email_hotel (hotel_id, email)
+SELECT id, 'admin@horizon.com.br'
+FROM hotel_base;
+
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+)
+INSERT INTO telefone_hotel (hotel_id, telefone)
+SELECT id, '8737620000'
+FROM hotel_base;
+
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+)
+INSERT INTO telefone_hotel (hotel_id, telefone)
+SELECT id, '87999998888'
+FROM hotel_base;
 
 INSERT INTO categoria (preco_diaria, capacidade) VALUES (150.0, 2);
 INSERT INTO categoria (preco_diaria, capacidade) VALUES (250.0, 3);
@@ -19,113 +49,1102 @@ INSERT INTO comodidade (nome) VALUES ('Vista Mar');
 INSERT INTO comodidade (nome) VALUES ('Cofre');
 INSERT INTO comodidade (nome) VALUES ('Varanda');
 INSERT INTO servico_adicional (nome_servico, descricao, preco) VALUES ('Café da Manhã no Quarto', 'Completo', 50.0);
-INSERT INTO servico_adicional (Fnome_servico, descricao, preco) VALUES ('Massagem Relaxante', '1 hora', 120.0);
+INSERT INTO servico_adicional (nome_servico, descricao, preco) VALUES ('Massagem Relaxante', '1 hora', 120.0);
 INSERT INTO servico_adicional (nome_servico, descricao, preco) VALUES ('Translado Aeroporto', 'Ida e volta', 80.0);
 INSERT INTO servico_adicional (nome_servico, descricao, preco) VALUES ('Jantar Romântico', 'Vinho incluso', 300.0);
 INSERT INTO servico_adicional (nome_servico, descricao, preco) VALUES ('Lavanderia Express', 'Por peça', 15.0);
 
 -- Quartos
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 3, '101', 'Limpeza', 26.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (1, 3);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (1, 5);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (1, 8);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 1, '102', 'Disponível', 22.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (2, 5);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (2, 1);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 4, '103', 'Ocupado', 55.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (3, 1);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (3, 2);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 1, '104', 'Disponível', 39.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (4, 5);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (4, 8);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 1, '105', 'Disponível', 36.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (5, 1);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 1, '106', 'Ocupado', 25.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (6, 5);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (6, 2);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 3, '107', 'Disponível', 39.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (7, 2);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (7, 6);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 4, '108', 'Limpeza', 42.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (8, 6);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (8, 4);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (8, 8);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 4, '109', 'Ocupado', 34.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (9, 1);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (9, 6);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 1, '110', 'Disponível', 29.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (10, 2);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (10, 1);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (10, 6);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (10, 4);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 4, '111', 'Limpeza', 45.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (11, 3);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 1, '112', 'Ocupado', 46.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (12, 3);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (12, 1);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 3, '113', 'Limpeza', 57.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (13, 2);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (13, 8);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 4, '114', 'Disponível', 36.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (14, 8);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (14, 5);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (14, 2);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 1, '115', 'Disponível', 60.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (15, 3);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (15, 4);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (15, 1);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 2, '116', 'Disponível', 43.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (16, 3);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (16, 6);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 4, '117', 'Disponível', 40.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (17, 7);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 4, '118', 'Disponível', 25.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (18, 3);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (18, 4);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 4, '119', 'Ocupado', 30.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (19, 5);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 3, '120', 'Disponível', 28.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (20, 3);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (20, 6);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (20, 8);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 2, '121', 'Disponível', 29.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (21, 6);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 4, '122', 'Limpeza', 41.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (22, 3);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 3, '123', 'Ocupado', 52.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (23, 6);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (23, 7);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (23, 8);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (23, 5);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 3, '124', 'Limpeza', 40.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (24, 3);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (24, 4);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (24, 7);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (24, 6);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 4, '125', 'Limpeza', 37.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (25, 2);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (25, 5);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (25, 4);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (25, 6);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 3, '126', 'Ocupado', 22.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (26, 1);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 2, '127', 'Disponível', 39.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (27, 8);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (27, 3);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (27, 6);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 3, '128', 'Disponível', 55.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (28, 4);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 4, '129', 'Limpeza', 34.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (29, 1);
-INSERT INTO quarto (hotel_id, categoria_id, numero, status, area) VALUES (1, 4, '130', 'Ocupado', 43.00);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (30, 5);
-INSERT INTO quarto_comodidade (quarto_id, comodidade_id) VALUES (30, 4);
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 450.00 AND capacidade = 4
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '101', 'Limpeza', 26.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Frigobar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '101' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
 
-INSERT INTO funcionario (cpf, hotel_id, nome, email, cargo, salario) VALUES ('40836152905', 1, 'Ana Júlia Macedo', 'davi-luiz25@example.org', 'Concierge', 2429.00);
-INSERT INTO funcionario (cpf, hotel_id, nome, email, cargo, salario) VALUES ('73052968130', 1, 'Manuella da Paz', 'tsiqueira@example.com', 'Recepcionista', 3103.00);
-INSERT INTO funcionario (cpf, hotel_id, nome, email, cargo, salario) VALUES ('76052849347', 1, 'Luiz Gustavo Lopes', 'jpinto@example.com', 'Camareira', 1767.00);
-INSERT INTO funcionario (cpf, hotel_id, nome, email, cargo, salario) VALUES ('93625018721', 1, 'Liz Leão', 'sofiaalbuquerque@example.com', 'Concierge', 2435.00);
-INSERT INTO funcionario (cpf, hotel_id, nome, email, cargo, salario) VALUES ('90184735610', 1, 'Srta. Amanda Azevedo', 'vargasbenjamim@example.com', 'Concierge', 4051.00);
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Banheira'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '101' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Varanda'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '101' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 150.00 AND capacidade = 2
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '102', 'Disponível', 22.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Banheira'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '102' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Wi-Fi'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '102' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 1200.00 AND capacidade = 5
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '103', 'Ocupado', 55.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Wi-Fi'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '103' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Ar Condicionado'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '103' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 150.00 AND capacidade = 2
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '104', 'Disponível', 39.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Banheira'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '104' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Varanda'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '104' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 150.00 AND capacidade = 2
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '105', 'Disponível', 36.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Wi-Fi'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '105' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 150.00 AND capacidade = 2
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '106', 'Ocupado', 25.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Banheira'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '106' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Ar Condicionado'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '106' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 450.00 AND capacidade = 4
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '107', 'Disponível', 39.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Ar Condicionado'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '107' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Vista Mar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '107' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 1200.00 AND capacidade = 5
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '108', 'Limpeza', 42.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Vista Mar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '108' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Smart TV'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '108' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Varanda'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '108' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 1200.00 AND capacidade = 5
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '109', 'Ocupado', 34.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Wi-Fi'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '109' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Vista Mar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '109' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 150.00 AND capacidade = 2
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '110', 'Disponível', 29.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Ar Condicionado'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '110' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Wi-Fi'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '110' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Vista Mar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '110' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Smart TV'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '110' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 1200.00 AND capacidade = 5
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '111', 'Limpeza', 45.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Frigobar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '111' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 150.00 AND capacidade = 2
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '112', 'Ocupado', 46.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Frigobar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '112' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Wi-Fi'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '112' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 450.00 AND capacidade = 4
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '113', 'Limpeza', 57.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Ar Condicionado'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '113' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Varanda'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '113' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 1200.00 AND capacidade = 5
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '114', 'Disponível', 36.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Varanda'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '114' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Banheira'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '114' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Ar Condicionado'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '114' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 150.00 AND capacidade = 2
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '115', 'Disponível', 60.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Frigobar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '115' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Smart TV'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '115' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Wi-Fi'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '115' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 250.00 AND capacidade = 3
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '116', 'Disponível', 43.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Frigobar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '116' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Vista Mar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '116' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 1200.00 AND capacidade = 5
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '117', 'Disponível', 40.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Cofre'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '117' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 1200.00 AND capacidade = 5
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '118', 'Disponível', 25.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Frigobar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '118' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Smart TV'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '118' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 1200.00 AND capacidade = 5
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '119', 'Ocupado', 30.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Banheira'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '119' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 450.00 AND capacidade = 4
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '120', 'Disponível', 28.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Frigobar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '120' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Vista Mar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '120' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Varanda'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '120' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 250.00 AND capacidade = 3
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '121', 'Disponível', 29.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Vista Mar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '121' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 1200.00 AND capacidade = 5
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '122', 'Limpeza', 41.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Frigobar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '122' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 450.00 AND capacidade = 4
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '123', 'Ocupado', 52.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Vista Mar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '123' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Cofre'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '123' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Varanda'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '123' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Banheira'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '123' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 450.00 AND capacidade = 4
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '124', 'Limpeza', 40.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Frigobar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '124' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Smart TV'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '124' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Cofre'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '124' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Vista Mar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '124' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 1200.00 AND capacidade = 5
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '125', 'Limpeza', 37.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Ar Condicionado'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '125' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Banheira'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '125' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Smart TV'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '125' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Vista Mar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '125' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 450.00 AND capacidade = 4
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '126', 'Ocupado', 22.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Wi-Fi'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '126' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 250.00 AND capacidade = 3
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '127', 'Disponível', 39.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Varanda'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '127' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Frigobar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '127' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Vista Mar'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '127' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 450.00 AND capacidade = 4
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '128', 'Disponível', 55.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Smart TV'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '128' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 1200.00 AND capacidade = 5
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '129', 'Limpeza', 34.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Wi-Fi'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '129' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+), categoria_base AS (
+  SELECT id FROM categoria WHERE preco_diaria = 1200.00 AND capacidade = 5
+)
+INSERT INTO quarto (hotel_id, categoria_id, numero, status, area)
+SELECT h.id, c.id, '130', 'Ocupado', 43.00
+FROM hotel_base h, categoria_base c;
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Banheira'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '130' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH comodidade_base AS (
+  SELECT id FROM comodidade WHERE nome = 'Smart TV'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '130' AND h.cnpj = '27164580000109'
+)
+INSERT INTO quarto_comodidade (quarto_id, comodidade_id)
+SELECT q.id, c.id
+FROM quarto_base q
+CROSS JOIN comodidade_base c;
+
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+)
+INSERT INTO funcionario (cpf, hotel_id, nome, email, cargo, salario)
+SELECT '40836152905', id, 'Ana Júlia Macedo', 'davi-luiz25@example.org', 'Concierge', 2429.00
+FROM hotel_base;
+
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+)
+INSERT INTO funcionario (cpf, hotel_id, nome, email, cargo, salario)
+SELECT '73052968130', id, 'Manuella da Paz', 'tsiqueira@example.com', 'Recepcionista', 3103.00
+FROM hotel_base;
+
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+)
+INSERT INTO funcionario (cpf, hotel_id, nome, email, cargo, salario)
+SELECT '76052849347', id, 'Luiz Gustavo Lopes', 'jpinto@example.com', 'Camareira', 1767.00
+FROM hotel_base;
+
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+)
+INSERT INTO funcionario (cpf, hotel_id, nome, email, cargo, salario)
+SELECT '93625018721', id, 'Liz Leão', 'sofiaalbuquerque@example.com', 'Concierge', 2435.00
+FROM hotel_base;
+
+WITH hotel_base AS (
+  SELECT id FROM hotel WHERE cnpj = '27164580000109'
+)
+INSERT INTO funcionario (cpf, hotel_id, nome, email, cargo, salario)
+SELECT '90184735610', id, 'Srta. Amanda Azevedo', 'vargasbenjamim@example.com', 'Concierge', 4051.00
+FROM hotel_base;
 
 -- Clientes
 INSERT INTO cliente (cpf, nome, data_nascimento, email, telefone) VALUES ('03624197878', 'Gael Aparecida', '1994-02-19', 'qmoraes@example.org', '+55043963817115');
@@ -181,171 +1200,1267 @@ INSERT INTO cliente (cpf, nome, data_nascimento, email, telefone) VALUES ('18504
 
 -- Reservas
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('31457892600', '2026-01-09', '2026-01-19', '2026-01-27', 'Concluída');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (1, 9);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '31457892600' AND data_reserva = '2026-01-09'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '109' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('13590267461', '2026-01-03', '2026-01-12', '2026-01-18', 'Cancelada');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (2, 30);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (2, 5, 2);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '13590267461' AND data_reserva = '2026-01-03'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '130' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Lavanderia Express'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '13590267461' AND data_reserva = '2026-01-03'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 2
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('41386572900', '2026-01-26', '2026-01-31', '2026-02-05', 'Concluída');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (3, 23);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '41386572900' AND data_reserva = '2026-01-26'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '123' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('24810957667', '2026-03-07', '2026-03-12', '2026-03-15', 'Pendente');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (4, 2);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (4, 5, 1);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '24810957667' AND data_reserva = '2026-03-07'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '102' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Lavanderia Express'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '24810957667' AND data_reserva = '2026-03-07'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 1
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('18063974557', '2026-01-09', '2026-01-18', '2026-01-19', 'Concluída');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (5, 6);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (5, 4, 1);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '18063974557' AND data_reserva = '2026-01-09'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '106' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Jantar Romântico'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '18063974557' AND data_reserva = '2026-01-09'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 1
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('13259068759', '2026-01-17', '2026-01-22', '2026-01-23', 'Concluída');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (6, 10);
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (6, 23);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '13259068759' AND data_reserva = '2026-01-17'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '110' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '13259068759' AND data_reserva = '2026-01-17'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '123' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('28450179360', '2026-02-25', '2026-03-04', '2026-03-07', 'Pendente');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (7, 14);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (7, 4, 2);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '28450179360' AND data_reserva = '2026-02-25'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '114' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Jantar Romântico'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '28450179360' AND data_reserva = '2026-02-25'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 2
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('08137259414', '2026-03-12', '2026-03-13', '2026-03-22', 'Pendente');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (8, 30);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '08137259414' AND data_reserva = '2026-03-12'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '130' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('01956873457', '2026-01-24', '2026-02-03', '2026-02-11', 'Concluída');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (9, 15);
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (9, 24);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (9, 3, 2);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '01956873457' AND data_reserva = '2026-01-24'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '115' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '01956873457' AND data_reserva = '2026-01-24'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '124' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Translado Aeroporto'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '01956873457' AND data_reserva = '2026-01-24'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 2
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('28450179360', '2026-04-03', '2026-04-05', '2026-04-08', 'Confirmada');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (10, 9);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (10, 1, 1);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '28450179360' AND data_reserva = '2026-04-03'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '109' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Café da Manhã no Quarto'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '28450179360' AND data_reserva = '2026-04-03'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 1
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('67251409399', '2026-01-07', '2026-01-11', '2026-01-13', 'Concluída');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (11, 4);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '67251409399' AND data_reserva = '2026-01-07'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '104' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('03624197878', '2026-01-30', '2026-02-05', '2026-02-12', 'Concluída');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (12, 23);
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (12, 29);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (12, 5, 2);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '03624197878' AND data_reserva = '2026-01-30'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '123' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '03624197878' AND data_reserva = '2026-01-30'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '129' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Lavanderia Express'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '03624197878' AND data_reserva = '2026-01-30'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 2
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('41386572900', '2026-01-28', '2026-02-03', '2026-02-06', 'Concluída');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (13, 27);
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (13, 19);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (13, 4, 1);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '41386572900' AND data_reserva = '2026-01-28'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '127' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '41386572900' AND data_reserva = '2026-01-28'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '119' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Jantar Romântico'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '41386572900' AND data_reserva = '2026-01-28'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 1
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('52430179652', '2026-02-06', '2026-02-15', '2026-02-25', 'Confirmada');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (14, 23);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (14, 4, 2);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '52430179652' AND data_reserva = '2026-02-06'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '123' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Jantar Romântico'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '52430179652' AND data_reserva = '2026-02-06'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 2
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('31790682568', '2026-03-18', '2026-03-23', '2026-03-30', 'Confirmada');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (15, 9);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (15, 2, 1);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '31790682568' AND data_reserva = '2026-03-18'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '109' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Massagem Relaxante'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '31790682568' AND data_reserva = '2026-03-18'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 1
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('65249801749', '2026-03-06', '2026-03-15', '2026-03-20', 'Pendente');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (16, 16);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (16, 5, 2);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '65249801749' AND data_reserva = '2026-03-06'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '116' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Lavanderia Express'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '65249801749' AND data_reserva = '2026-03-06'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 2
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('72938516002', '2026-04-03', '2026-04-07', '2026-04-14', 'Confirmada');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (17, 10);
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (17, 22);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (17, 3, 1);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '72938516002' AND data_reserva = '2026-04-03'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '110' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '72938516002' AND data_reserva = '2026-04-03'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '122' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Translado Aeroporto'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '72938516002' AND data_reserva = '2026-04-03'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 1
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('09516823424', '2026-03-10', '2026-03-20', '2026-03-23', 'Pendente');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (18, 20);
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (18, 15);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '09516823424' AND data_reserva = '2026-03-10'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '120' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '09516823424' AND data_reserva = '2026-03-10'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '115' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('93106527480', '2026-03-02', '2026-03-09', '2026-03-16', 'Confirmada');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (19, 2);
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (19, 26);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '93106527480' AND data_reserva = '2026-03-02'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '102' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '93106527480' AND data_reserva = '2026-03-02'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '126' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('91568403224', '2026-02-22', '2026-02-26', '2026-03-07', 'Confirmada');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (20, 6);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '91568403224' AND data_reserva = '2026-02-22'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '106' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('47251896346', '2026-02-17', '2026-02-19', '2026-02-23', 'Confirmada');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (21, 10);
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (21, 12);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '47251896346' AND data_reserva = '2026-02-17'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '110' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '47251896346' AND data_reserva = '2026-02-17'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '112' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('18504972658', '2026-02-15', '2026-02-19', '2026-02-20', 'Pendente');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (22, 28);
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (22, 21);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '18504972658' AND data_reserva = '2026-02-15'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '128' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '18504972658' AND data_reserva = '2026-02-15'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '121' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('67493012822', '2026-02-05', '2026-02-12', '2026-02-14', 'Confirmada');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (23, 25);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (23, 1, 2);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '67493012822' AND data_reserva = '2026-02-05'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '125' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Café da Manhã no Quarto'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '67493012822' AND data_reserva = '2026-02-05'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 2
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('18063974557', '2026-03-20', '2026-03-21', '2026-03-31', 'Confirmada');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (24, 5);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '18063974557' AND data_reserva = '2026-03-20'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '105' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('52039617434', '2026-01-28', '2026-02-04', '2026-02-07', 'Concluída');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (25, 11);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '52039617434' AND data_reserva = '2026-01-28'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '111' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('31457892600', '2026-03-22', '2026-03-26', '2026-04-05', 'Confirmada');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (26, 21);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '31457892600' AND data_reserva = '2026-03-22'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '121' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('41386572900', '2026-02-05', '2026-02-07', '2026-02-08', 'Pendente');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (27, 12);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '41386572900' AND data_reserva = '2026-02-05'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '112' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('93106527480', '2026-02-07', '2026-02-11', '2026-02-17', 'Pendente');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (28, 7);
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (28, 24);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '93106527480' AND data_reserva = '2026-02-07'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '107' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '93106527480' AND data_reserva = '2026-02-07'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '124' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('31724968050', '2026-03-12', '2026-03-19', '2026-03-28', 'Confirmada');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (29, 16);
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (29, 13);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (29, 1, 2);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '31724968050' AND data_reserva = '2026-03-12'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '116' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '31724968050' AND data_reserva = '2026-03-12'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '113' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Café da Manhã no Quarto'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '31724968050' AND data_reserva = '2026-03-12'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 2
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('47586130957', '2026-01-22', '2026-01-26', '2026-02-01', 'Concluída');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (30, 4);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (30, 5, 1);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '47586130957' AND data_reserva = '2026-01-22'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '104' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Lavanderia Express'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '47586130957' AND data_reserva = '2026-01-22'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 1
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('31790682568', '2026-02-18', '2026-02-22', '2026-03-02', 'Confirmada');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (31, 17);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (31, 1, 2);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '31790682568' AND data_reserva = '2026-02-18'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '117' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Café da Manhã no Quarto'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '31790682568' AND data_reserva = '2026-02-18'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 2
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('35164089289', '2026-03-05', '2026-03-13', '2026-03-15', 'Confirmada');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (32, 2);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '35164089289' AND data_reserva = '2026-03-05'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '102' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('18063974557', '2026-02-20', '2026-02-28', '2026-03-08', 'Pendente');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (33, 15);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (33, 1, 2);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '18063974557' AND data_reserva = '2026-02-20'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '115' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Café da Manhã no Quarto'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '18063974557' AND data_reserva = '2026-02-20'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 2
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('13259068759', '2026-02-08', '2026-02-12', '2026-02-18', 'Pendente');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (34, 7);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (34, 4, 1);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '13259068759' AND data_reserva = '2026-02-08'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '107' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Jantar Romântico'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '13259068759' AND data_reserva = '2026-02-08'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 1
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('59201476876', '2026-03-14', '2026-03-20', '2026-03-25', 'Pendente');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (35, 11);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '59201476876' AND data_reserva = '2026-03-14'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '111' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('72938516002', '2026-03-22', '2026-04-01', '2026-04-05', 'Confirmada');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (36, 4);
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (36, 12);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (36, 5, 1);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '72938516002' AND data_reserva = '2026-03-22'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '104' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '72938516002' AND data_reserva = '2026-03-22'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '112' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Lavanderia Express'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '72938516002' AND data_reserva = '2026-03-22'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 1
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('75640839210', '2026-03-18', '2026-03-19', '2026-03-20', 'Pendente');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (37, 8);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (37, 5, 1);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '75640839210' AND data_reserva = '2026-03-18'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '108' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Lavanderia Express'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '75640839210' AND data_reserva = '2026-03-18'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 1
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('31724968050', '2026-02-10', '2026-02-14', '2026-02-15', 'Confirmada');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (38, 16);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (38, 4, 2);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '31724968050' AND data_reserva = '2026-02-10'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '116' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Jantar Romântico'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '31724968050' AND data_reserva = '2026-02-10'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 2
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('31457892600', '2026-01-19', '2026-01-26', '2026-01-28', 'Cancelada');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (39, 21);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (39, 4, 1);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '31457892600' AND data_reserva = '2026-01-19'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '121' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Jantar Romântico'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '31457892600' AND data_reserva = '2026-01-19'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 1
+FROM reserva_base r
+CROSS JOIN servico_base s;
 INSERT INTO reserva (cpf_cliente, data_reserva, data_checkin_previsto, data_checkout_previsto, status_reserva) VALUES ('53106284790', '2026-03-30', '2026-04-06', '2026-04-12', 'Confirmada');
-INSERT INTO reserva_quarto (reserva_id, quarto_id) VALUES (40, 29);
-INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade) VALUES (40, 4, 2);
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '53106284790' AND data_reserva = '2026-03-30'
+), quarto_base AS (
+  SELECT q.id
+  FROM quarto q
+  JOIN hotel h ON q.hotel_id = h.id
+  WHERE q.numero = '129' AND h.cnpj = '27164580000109'
+)
+INSERT INTO reserva_quarto (reserva_id, quarto_id)
+SELECT r.id, q.id
+FROM reserva_base r
+CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Jantar Romântico'
+), reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '53106284790' AND data_reserva = '2026-03-30'
+)
+INSERT INTO reserva_servico (reserva_id, servico_adicional_id, quantidade)
+SELECT r.id, s.id, 2
+FROM reserva_base r
+CROSS JOIN servico_base s;
 
 -- Hospedagens
-INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real) VALUES (1, '31457892600', '2026-01-19', '2026-01-20');
-INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id) VALUES (1, 9);
-INSERT INTO hospedagem_servico (hospedagem_id, servico_adicional_id, quantidade, data_solicitacao) VALUES (1, 2, 5, '2026-01-19 20:00:00');
-INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento) VALUES (1, 1030.5, 'Pix', 'Concluído');
-INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real) VALUES (3, '41386572900', '2026-01-31', '2026-02-04');
-INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id) VALUES (2, 23);
-INSERT INTO hospedagem_servico (hospedagem_id, servico_adicional_id, quantidade, data_solicitacao) VALUES (2, 5, 4, '2026-01-31 20:00:00');
-INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento) VALUES (2, 364.5, 'Pix', 'Concluído');
-INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real) VALUES (5, '18063974557', '2026-01-18', '2026-01-22');
-INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id) VALUES (3, 6);
-INSERT INTO hospedagem_servico (hospedagem_id, servico_adicional_id, quantidade, data_solicitacao) VALUES (3, 2, 3, '2026-01-18 20:00:00');
-INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento) VALUES (3, 943.5, 'Cartão Crédito', 'Concluído');
-INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real) VALUES (6, '13259068759', '2026-01-22', '2026-01-23');
-INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id) VALUES (4, 10);
-INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id) VALUES (4, 23);
-INSERT INTO hospedagem_servico (hospedagem_id, servico_adicional_id, quantidade, data_solicitacao) VALUES (4, 4, 3, '2026-01-22 20:00:00');
-INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento) VALUES (4, 1091.5, 'Pix', 'Concluído');
-INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real) VALUES (9, '01956873457', '2026-02-03', '2026-02-05');
-INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id) VALUES (5, 15);
-INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id) VALUES (5, 24);
-INSERT INTO hospedagem_servico (hospedagem_id, servico_adicional_id, quantidade, data_solicitacao) VALUES (5, 4, 4, '2026-02-03 20:00:00');
-INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento) VALUES (5, 1918.5, 'Pix', 'Concluído');
-INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real) VALUES (11, '67251409399', '2026-01-11', '2026-01-13');
-INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id) VALUES (6, 4);
-INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento) VALUES (6, 1027.5, 'Cartão Crédito', 'Concluído');
-INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real) VALUES (12, '03624197878', '2026-02-05', '2026-02-06');
-INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id) VALUES (7, 23);
-INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id) VALUES (7, 29);
-INSERT INTO hospedagem_servico (hospedagem_id, servico_adicional_id, quantidade, data_solicitacao) VALUES (7, 2, 5, '2026-02-05 20:00:00');
-INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento) VALUES (7, 1207.5, 'Cartão Crédito', 'Concluído');
-INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real) VALUES (13, '41386572900', '2026-02-03', '2026-02-05');
-INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id) VALUES (8, 27);
-INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id) VALUES (8, 19);
-INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento) VALUES (8, 295.5, 'Cartão Crédito', 'Concluído');
-INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real) VALUES (25, '52039617434', '2026-02-04', '2026-02-09');
-INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id) VALUES (9, 11);
-INSERT INTO hospedagem_servico (hospedagem_id, servico_adicional_id, quantidade, data_solicitacao) VALUES (9, 3, 5, '2026-02-04 20:00:00');
-INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento) VALUES (9, 1209.5, 'Pix', 'Concluído');
-INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real) VALUES (30, '47586130957', '2026-01-26', '2026-01-27');
-INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id) VALUES (10, 4);
-INSERT INTO hospedagem_servico (hospedagem_id, servico_adicional_id, quantidade, data_solicitacao) VALUES (10, 2, 4, '2026-01-26 20:00:00');
-INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento) VALUES (10, 500.5, 'Pix', 'Concluído');
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '31457892600' AND data_reserva = '2026-01-09'
+)
+INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real)
+SELECT r.id, '31457892600', '2026-01-19', '2026-01-20' FROM reserva_base r;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '31457892600' AND data_reserva = '2026-01-09')
+    AND h.data_checkin_real = '2026-01-19'
+), quarto_base AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '109' AND h2.cnpj = '27164580000109'
+)
+INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id)
+SELECT h.id, q.id FROM hospedagem_base h CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Massagem Relaxante'
+), hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '31457892600' AND data_reserva = '2026-01-09')
+    AND h.data_checkin_real = '2026-01-19'
+)
+INSERT INTO hospedagem_servico (hospedagem_id, servico_adicional_id, quantidade, data_solicitacao)
+SELECT h.id, s.id, 5, '2026-01-19 20:00:00' FROM hospedagem_base h CROSS JOIN servico_base s;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '31457892600' AND data_reserva = '2026-01-09')
+    AND h.data_checkin_real = '2026-01-19'
+)
+INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento)
+SELECT h.id, 1030.5, 'Pix', 'Concluído' FROM hospedagem_base h;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '41386572900' AND data_reserva = '2026-01-26'
+)
+INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real)
+SELECT r.id, '41386572900', '2026-01-31', '2026-02-04' FROM reserva_base r;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '41386572900' AND data_reserva = '2026-01-26')
+    AND h.data_checkin_real = '2026-01-31'
+), quarto_base AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '123' AND h2.cnpj = '27164580000109'
+)
+INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id)
+SELECT h.id, q.id FROM hospedagem_base h CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Lavanderia Express'
+), hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '41386572900' AND data_reserva = '2026-01-26')
+    AND h.data_checkin_real = '2026-01-31'
+)
+INSERT INTO hospedagem_servico (hospedagem_id, servico_adicional_id, quantidade, data_solicitacao)
+SELECT h.id, s.id, 4, '2026-01-31 20:00:00' FROM hospedagem_base h CROSS JOIN servico_base s;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '41386572900' AND data_reserva = '2026-01-26')
+    AND h.data_checkin_real = '2026-01-31'
+)
+INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento)
+SELECT h.id, 364.5, 'Pix', 'Concluído' FROM hospedagem_base h;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '18063974557' AND data_reserva = '2026-01-09'
+)
+INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real)
+SELECT r.id, '18063974557', '2026-01-18', '2026-01-22' FROM reserva_base r;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '18063974557' AND data_reserva = '2026-01-09')
+    AND h.data_checkin_real = '2026-01-18'
+), quarto_base AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '106' AND h2.cnpj = '27164580000109'
+)
+INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id)
+SELECT h.id, q.id FROM hospedagem_base h CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Massagem Relaxante'
+), hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '18063974557' AND data_reserva = '2026-01-09')
+    AND h.data_checkin_real = '2026-01-18'
+)
+INSERT INTO hospedagem_servico (hospedagem_id, servico_adicional_id, quantidade, data_solicitacao)
+SELECT h.id, s.id, 3, '2026-01-18 20:00:00' FROM hospedagem_base h CROSS JOIN servico_base s;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '18063974557' AND data_reserva = '2026-01-09')
+    AND h.data_checkin_real = '2026-01-18'
+)
+INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento)
+SELECT h.id, 943.5, 'Cartão Crédito', 'Concluído' FROM hospedagem_base h;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '13259068759' AND data_reserva = '2026-01-17'
+)
+INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real)
+SELECT r.id, '13259068759', '2026-01-22', '2026-01-23' FROM reserva_base r;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '13259068759' AND data_reserva = '2026-01-17')
+    AND h.data_checkin_real = '2026-01-22'
+), quarto_base1 AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '110' AND h2.cnpj = '27164580000109'
+), quarto_base2 AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '123' AND h2.cnpj = '27164580000109'
+)
+INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id)
+SELECT h.id, q.id FROM hospedagem_base h CROSS JOIN quarto_base1 q;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '13259068759' AND data_reserva = '2026-01-17')
+    AND h.data_checkin_real = '2026-01-22'
+), quarto_base AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '123' AND h2.cnpj = '27164580000109'
+)
+INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id)
+SELECT h.id, q.id FROM hospedagem_base h CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Jantar Romântico'
+), hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '13259068759' AND data_reserva = '2026-01-17')
+    AND h.data_checkin_real = '2026-01-22'
+)
+INSERT INTO hospedagem_servico (hospedagem_id, servico_adicional_id, quantidade, data_solicitacao)
+SELECT h.id, s.id, 3, '2026-01-22 20:00:00' FROM hospedagem_base h CROSS JOIN servico_base s;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '13259068759' AND data_reserva = '2026-01-17')
+    AND h.data_checkin_real = '2026-01-22'
+)
+INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento)
+SELECT h.id, 1091.5, 'Pix', 'Concluído' FROM hospedagem_base h;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '01956873457' AND data_reserva = '2026-01-24'
+)
+INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real)
+SELECT r.id, '01956873457', '2026-02-03', '2026-02-05' FROM reserva_base r;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '01956873457' AND data_reserva = '2026-01-24')
+    AND h.data_checkin_real = '2026-02-03'
+), quarto_base1 AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '115' AND h2.cnpj = '27164580000109'
+), quarto_base2 AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '124' AND h2.cnpj = '27164580000109'
+)
+INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id)
+SELECT h.id, q.id FROM hospedagem_base h CROSS JOIN quarto_base1 q;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '01956873457' AND data_reserva = '2026-01-24')
+    AND h.data_checkin_real = '2026-02-03'
+), quarto_base AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '124' AND h2.cnpj = '27164580000109'
+)
+INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id)
+SELECT h.id, q.id FROM hospedagem_base h CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Jantar Romântico'
+), hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '01956873457' AND data_reserva = '2026-01-24')
+    AND h.data_checkin_real = '2026-02-03'
+)
+INSERT INTO hospedagem_servico (hospedagem_id, servico_adicional_id, quantidade, data_solicitacao)
+SELECT h.id, s.id, 4, '2026-02-03 20:00:00' FROM hospedagem_base h CROSS JOIN servico_base s;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '01956873457' AND data_reserva = '2026-01-24')
+    AND h.data_checkin_real = '2026-02-03'
+)
+INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento)
+SELECT h.id, 1918.5, 'Pix', 'Concluído' FROM hospedagem_base h;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '67251409399' AND data_reserva = '2026-01-07'
+)
+INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real)
+SELECT r.id, '67251409399', '2026-01-11', '2026-01-13' FROM reserva_base r;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '67251409399' AND data_reserva = '2026-01-07')
+    AND h.data_checkin_real = '2026-01-11'
+), quarto_base AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '104' AND h2.cnpj = '27164580000109'
+)
+INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id)
+SELECT h.id, q.id FROM hospedagem_base h CROSS JOIN quarto_base q;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '67251409399' AND data_reserva = '2026-01-07')
+    AND h.data_checkin_real = '2026-01-11'
+)
+INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento)
+SELECT h.id, 1027.5, 'Cartão Crédito', 'Concluído' FROM hospedagem_base h;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '03624197878' AND data_reserva = '2026-01-30'
+)
+INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real)
+SELECT r.id, '03624197878', '2026-02-05', '2026-02-06' FROM reserva_base r;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '03624197878' AND data_reserva = '2026-01-30')
+    AND h.data_checkin_real = '2026-02-05'
+), quarto_base1 AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '123' AND h2.cnpj = '27164580000109'
+), quarto_base2 AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '129' AND h2.cnpj = '27164580000109'
+)
+INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id)
+SELECT h.id, q.id FROM hospedagem_base h CROSS JOIN quarto_base1 q;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '03624197878' AND data_reserva = '2026-01-30')
+    AND h.data_checkin_real = '2026-02-05'
+), quarto_base AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '129' AND h2.cnpj = '27164580000109'
+)
+INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id)
+SELECT h.id, q.id FROM hospedagem_base h CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Massagem Relaxante'
+), hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '03624197878' AND data_reserva = '2026-01-30')
+    AND h.data_checkin_real = '2026-02-05'
+)
+INSERT INTO hospedagem_servico (hospedagem_id, servico_adicional_id, quantidade, data_solicitacao)
+SELECT h.id, s.id, 5, '2026-02-05 20:00:00' FROM hospedagem_base h CROSS JOIN servico_base s;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '03624197878' AND data_reserva = '2026-01-30')
+    AND h.data_checkin_real = '2026-02-05'
+)
+INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento)
+SELECT h.id, 1207.5, 'Cartão Crédito', 'Concluído' FROM hospedagem_base h;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '41386572900' AND data_reserva = '2026-01-28'
+)
+INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real)
+SELECT r.id, '41386572900', '2026-02-03', '2026-02-05' FROM reserva_base r;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '41386572900' AND data_reserva = '2026-01-28')
+    AND h.data_checkin_real = '2026-02-03'
+), quarto_base1 AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '127' AND h2.cnpj = '27164580000109'
+), quarto_base2 AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '119' AND h2.cnpj = '27164580000109'
+)
+INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id)
+SELECT h.id, q.id FROM hospedagem_base h CROSS JOIN quarto_base1 q;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '41386572900' AND data_reserva = '2026-01-28')
+    AND h.data_checkin_real = '2026-02-03'
+), quarto_base AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '119' AND h2.cnpj = '27164580000109'
+)
+INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id)
+SELECT h.id, q.id FROM hospedagem_base h CROSS JOIN quarto_base q;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '41386572900' AND data_reserva = '2026-01-28')
+    AND h.data_checkin_real = '2026-02-03'
+)
+INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento)
+SELECT h.id, 295.5, 'Cartão Crédito', 'Concluído' FROM hospedagem_base h;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '52039617434' AND data_reserva = '2026-01-28'
+)
+INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real)
+SELECT r.id, '52039617434', '2026-02-04', '2026-02-09' FROM reserva_base r;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '52039617434' AND data_reserva = '2026-01-28')
+    AND h.data_checkin_real = '2026-02-04'
+), quarto_base AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '111' AND h2.cnpj = '27164580000109'
+)
+INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id)
+SELECT h.id, q.id FROM hospedagem_base h CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Translado Aeroporto'
+), hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '52039617434' AND data_reserva = '2026-01-28')
+    AND h.data_checkin_real = '2026-02-04'
+)
+INSERT INTO hospedagem_servico (hospedagem_id, servico_adicional_id, quantidade, data_solicitacao)
+SELECT h.id, s.id, 5, '2026-02-04 20:00:00' FROM hospedagem_base h CROSS JOIN servico_base s;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '52039617434' AND data_reserva = '2026-01-28')
+    AND h.data_checkin_real = '2026-02-04'
+)
+INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento)
+SELECT h.id, 1209.5, 'Pix', 'Concluído' FROM hospedagem_base h;
+
+WITH reserva_base AS (
+  SELECT id FROM reserva WHERE cpf_cliente = '47586130957' AND data_reserva = '2026-01-22'
+)
+INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real, data_checkout_real)
+SELECT r.id, '47586130957', '2026-01-26', '2026-01-27' FROM reserva_base r;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '47586130957' AND data_reserva = '2026-01-22')
+    AND h.data_checkin_real = '2026-01-26'
+), quarto_base AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '104' AND h2.cnpj = '27164580000109'
+)
+INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id)
+SELECT h.id, q.id FROM hospedagem_base h CROSS JOIN quarto_base q;
+WITH servico_base AS (
+  SELECT id FROM servico_adicional WHERE nome_servico = 'Massagem Relaxante'
+), hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '47586130957' AND data_reserva = '2026-01-22')
+    AND h.data_checkin_real = '2026-01-26'
+)
+INSERT INTO hospedagem_servico (hospedagem_id, servico_adicional_id, quantidade, data_solicitacao)
+SELECT h.id, s.id, 4, '2026-01-26 20:00:00' FROM hospedagem_base h CROSS JOIN servico_base s;
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h
+  WHERE h.reserva_id IN (SELECT id FROM reserva WHERE cpf_cliente = '47586130957' AND data_reserva = '2026-01-22')
+    AND h.data_checkin_real = '2026-01-26'
+)
+INSERT INTO pagamento (hospedagem_id, valor_total, metodo_pagamento, status_pagamento)
+SELECT h.id, 500.5, 'Pix', 'Concluído' FROM hospedagem_base h;
+
 INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real) VALUES (NULL, '09516823424', now());
-INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id) VALUES (11, 9);
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h WHERE h.reserva_id IS NULL AND h.cpf_cliente = '09516823424' ORDER BY h.id DESC LIMIT 1
+), quarto_base AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '109' AND h2.cnpj = '27164580000109'
+)
+INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id)
+SELECT h.id, q.id FROM hospedagem_base h CROSS JOIN quarto_base q;
+
 INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real) VALUES (NULL, '60213794896', now());
-INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id) VALUES (12, 28);
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h WHERE h.reserva_id IS NULL AND h.cpf_cliente = '60213794896' ORDER BY h.id DESC LIMIT 1
+), quarto_base AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '128' AND h2.cnpj = '27164580000109'
+)
+INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id)
+SELECT h.id, q.id FROM hospedagem_base h CROSS JOIN quarto_base q;
+
 INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real) VALUES (NULL, '18057293497', now());
-INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id) VALUES (13, 7);
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h WHERE h.reserva_id IS NULL AND h.cpf_cliente = '18057293497' ORDER BY h.id DESC LIMIT 1
+), quarto_base AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '107' AND h2.cnpj = '27164580000109'
+)
+INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id)
+SELECT h.id, q.id FROM hospedagem_base h CROSS JOIN quarto_base q;
+
 INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real) VALUES (NULL, '03624197878', now());
-INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id) VALUES (14, 29);
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h WHERE h.reserva_id IS NULL AND h.cpf_cliente = '03624197878' ORDER BY h.id DESC LIMIT 1
+), quarto_base AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '129' AND h2.cnpj = '27164580000109'
+)
+INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id)
+SELECT h.id, q.id FROM hospedagem_base h CROSS JOIN quarto_base q;
+
 INSERT INTO hospedagem (reserva_id, cpf_cliente, data_checkin_real) VALUES (NULL, '31790682568', now());
-INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id) VALUES (15, 26);
+WITH hospedagem_base AS (
+  SELECT h.id FROM hospedagem h WHERE h.reserva_id IS NULL AND h.cpf_cliente = '31790682568' ORDER BY h.id DESC LIMIT 1
+), quarto_base AS (
+  SELECT q.id FROM quarto q JOIN hotel h2 ON q.hotel_id = h2.id WHERE q.numero = '126' AND h2.cnpj = '27164580000109'
+)
+INSERT INTO hospedagem_quarto (hospedagem_id, quarto_id)
+SELECT h.id, q.id FROM hospedagem_base h CROSS JOIN quarto_base q;

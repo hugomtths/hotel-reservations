@@ -1,4 +1,5 @@
 import { forwardRef } from "react";
+import styles from "./Date.module.css";
 
 interface DateProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
@@ -14,15 +15,15 @@ const DateInput = forwardRef<HTMLInputElement, DateProps>(({
   onChange, name, label, required, value, disabled
 }, ref) => {
   return (
-    <div className="w-full">
-      <label htmlFor={name} className="block mb-2 text-sm font-medium text-gray-900 uppercase">
-        {label} {required && <span className="text-red-500">*</span>}
+    <div className={styles.container}>
+      <label htmlFor={name} className={styles.label}>
+        {label} {required && <span className={styles.required}>*</span>}
       </label>
       <input
         type="date"
         id={name}
         name={name}
-        className="block w-full p-2.5 bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-slate-500 focus:border-slate-500 outline-none transition-all"
+        className={styles.input}
         value={value}
         onChange={(e) => onChange({ target: { name: e.target.name, value: e.target.value } })}
         disabled={disabled}
@@ -33,5 +34,4 @@ const DateInput = forwardRef<HTMLInputElement, DateProps>(({
   );
 });
 
-DateInput.displayName = "DateInput";
 export default DateInput;

@@ -1,4 +1,5 @@
 import { forwardRef } from "react";
+import styles from "./Text.module.css";
 
 interface TextInputProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
@@ -14,15 +15,15 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(({
   onChange, name, message, label, required, value, disabled
 }, ref) => {
   return (
-    <div className="w-full">
-      <label htmlFor={name} className="block mb-2 text-sm font-medium text-gray-900 uppercase">
-        {label} {required && <span className="text-red-500">*</span>}
+    <div className={styles.container}>
+      <label htmlFor={name} className={styles.label}>
+        {label} {required && <span className={styles.required}>*</span>}
       </label>
       <input
         type="text"
         id={name}
         name={name}
-        className="block w-full p-2.5 bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-slate-500 focus:border-slate-500 outline-none transition-all"
+        className={styles.input}
         placeholder={message}
         value={value}
         onChange={(e) => onChange({ target: { name: e.target.name, value: e.target.value } })}
@@ -34,5 +35,4 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(({
   );
 });
 
-TextInput.displayName = "TextInput";
 export default TextInput;

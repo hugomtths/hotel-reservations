@@ -92,3 +92,34 @@
 .spacer {
   height: 2.5rem;
 }
+
+.roomsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 2rem;
+  padding: 2rem 3rem; 
+  max-width: 1280px; 
+  margin: 0 auto; 
+}
+
+.catalogHeader {
+  margin-bottom: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 3rem; 
+}
+
+.catalogTitle {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  letter-spacing: -0.025em;
+}
+
+.catalogSubtitle {
+  font-size: 1.125rem;
+  color: #6b7280;
+  margin: 0;
+}

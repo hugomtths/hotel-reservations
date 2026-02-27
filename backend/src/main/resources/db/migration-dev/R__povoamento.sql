@@ -150,7 +150,7 @@ INSERT INTO users (email, password_hash, role) VALUES
 ('marcos.gerencia@horizon.com', '$2a$10$dummyHash', 'GERENTE');
 
 -- Funcionários
-INSERT INTO funcionario (user_id, cpf, hotel_id, nome, cargo, salario) VALUES 
+INSERT INTO funcionario (usuario_id, cpf, hotel_id, nome, cargo, salario) VALUES 
 (51, '12345678901', 1, 'Carlos Silva', 'GERENTE', 4500.00),
 (52, '23456789012', 1, 'Marta Souza', 'RECEPCIONISTA', 2500.00),
 (53, '34567890123', 1, 'Pedro Alves', 'RECEPCIONISTA', 2500.00),

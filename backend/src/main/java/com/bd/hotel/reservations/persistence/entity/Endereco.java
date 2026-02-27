@@ -29,6 +29,6 @@ class Endereco {
     @Column(length = 100)
     private String cidade;
 
-    @Column(length = 2, columnDefinition = "char(2)")
+    @Column(length = 2)
     private String estado;
 }

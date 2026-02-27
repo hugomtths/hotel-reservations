@@ -56,7 +56,8 @@ public class AuthService {
                 user,
                 request.getNome(),
                 request.getCpf(),
-                request.getCelular()
+                request.getCelular(),
+                request.getDataNascimento()
         );
     }
 

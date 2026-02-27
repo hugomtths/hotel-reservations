@@ -7,6 +7,9 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ClienteRegisterRequest {
 
     @NotBlank(message = "Email é obrigatório")

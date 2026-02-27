@@ -39,27 +39,27 @@ let MOCK_RESERVATIONS: ReservationCardProps[] = [
   }
 ];
 
-export const getReservationsByEmail = async (email: string): Promise<ReservationCardProps[]> => {
+export const getReservationsByEmail = async (email?: string): Promise<ReservationCardProps[]> => {
   if (USE_MOCK) {
     return new Promise((resolve) => {
       setTimeout(() => {
-        console.log('Buscando reservas para (MOCK):', email);
-        // Filtra as reservas pelo e-mail
-        const filtered = MOCK_RESERVATIONS.filter(res => res.clientEmail === email);
-        // Retorna uma cópia para evitar mutações diretas acidentais
-        resolve([...filtered]);
+        console.log('Buscando reservas (MOCK). Email:', email);
+        if (email) {
+          const filtered = MOCK_RESERVATIONS.filter(res => res.clientEmail === email);
+          resolve([...filtered]);
+        } else {
+          // Se não passar email, retorna todas (comportamento para gerente)
+          resolve([...MOCK_RESERVATIONS]);
+        }
       }, 1000);
     });
   }
 
-  // Se não estiver usando Mock, faz a requisição real
   try {
-    // Busca as reservas na API filtrando por email
-    // Espera receber um array de objetos ReservationCardProps
-    const response = await api.get<ReservationCardProps[]>(`/reservations?email=${email}`);
+    const url = email ? `/reservations?email=${email}` : '/reservations';
+    const response = await api.get<ReservationCardProps[]>(url);
     return response.data;
   } catch (error) {
-    // Em caso de erro, loga e repassa o erro para o componente tratar
     console.error('Erro ao buscar reservas:', error);
     throw error;
   }

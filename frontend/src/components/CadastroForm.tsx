@@ -19,6 +19,7 @@ const CadastroForm: React.FC = () => {
   });
   const [confirmSenha, setConfirmSenha] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -30,6 +31,7 @@ const CadastroForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
     
     if (formData.senha !== confirmSenha) {
       setError('As senhas não coincidem.');
@@ -43,8 +45,12 @@ const CadastroForm: React.FC = () => {
       // Se VITE_USE_MOCK=false, enviará um POST para /auth/register
       await registerService(formData);
       
-      // Se cadastro for bem sucedido, redireciona para o login
-      navigate('/');
+      setSuccess('Cadastro realizado com sucesso! Redirecionando para o login...');
+      
+      // Se cadastro for bem sucedido, aguarda 2 segundos e redireciona para o login
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
     } catch (err: any) {
       // Captura erros do backend (ex: "Email já cadastrado")
       setError(err.message || 'Falha ao realizar cadastro.');
@@ -61,6 +67,7 @@ const CadastroForm: React.FC = () => {
       </div>
 
       {error && <div className={styles.error}>{error}</div>}
+      {success && <div className={styles.success} style={{ color: 'green', marginBottom: '1rem', textAlign: 'center' }}>{success}</div>}
 
       <form onSubmit={handleSubmit}>
         <div className={styles.inputsGroup}>

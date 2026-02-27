@@ -16,7 +16,7 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-class Hotel {
+public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

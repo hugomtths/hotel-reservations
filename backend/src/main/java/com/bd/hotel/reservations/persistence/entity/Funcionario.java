@@ -25,6 +25,9 @@ public class Funcionario {
     @Column(nullable=false)
     private String nome;
 
+    @Column(unique = true, nullable = false, length = 11)
+    private String cpf;
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_funcionario_hotel"))

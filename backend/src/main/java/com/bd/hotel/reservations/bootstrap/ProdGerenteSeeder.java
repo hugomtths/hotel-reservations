@@ -3,10 +3,13 @@ package com.bd.hotel.reservations.bootstrap;
 import com.bd.hotel.reservations.application.service.FuncionarioService;
 import com.bd.hotel.reservations.application.service.UserService;
 import com.bd.hotel.reservations.exception.business.EmailAlreadyRegisteredException;
+import com.bd.hotel.reservations.persistence.entity.Hotel;
 import com.bd.hotel.reservations.persistence.entity.User;
+import com.bd.hotel.reservations.persistence.enums.CargoFuncionario;
 import com.bd.hotel.reservations.persistence.enums.Role;
 import com.bd.hotel.reservations.persistence.repository.FuncionarioRepository;
 import com.bd.hotel.reservations.persistence.repository.UserRepository;
+import com.bd.hotel.reservations.persistence.repository.HotelRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
@@ -15,6 +18,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import java.math.BigDecimal;
 
 @Component
 @Profile("prod")
@@ -23,6 +27,7 @@ public class ProdGerenteSeeder implements ApplicationRunner {
 
     private final UserRepository userRepository;
     private final FuncionarioRepository funcionarioRepository;
+    private final HotelRepository hotelRepository;
 
     private final UserService userService;
     private final FuncionarioService funcionarioService;
@@ -61,6 +66,9 @@ public class ProdGerenteSeeder implements ApplicationRunner {
 
         if (funcionarioRepository.existsByUserId(user.getId())) return;
 
-        funcionarioService.criarPerfil(user, nome, matricula);
+        Hotel hotel = hotelRepository.findById(1L)
+            .orElseThrow(() -> new IllegalStateException("Não existe hotel cadastrado para o Gerente!"));
+
+        funcionarioService.criarPerfil(user, nome, "99988877766", hotel, CargoFuncionario.GERENTE, BigDecimal.valueOf(5000));
     }
 }

@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -26,4 +27,6 @@ public class ClienteRegisterRequest {
     private String cpf;
 
     private String celular;
+
+    private LocalDate dataNascimento;
 }

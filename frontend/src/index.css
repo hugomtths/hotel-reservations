@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden; 
+}
+
+@font-face {
+  font-family: 'Ahsing';
+  src: url('./assets/fonts/ahsing.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.font-ahsing {
+  font-family: 'Ahsing', cursive;
+}

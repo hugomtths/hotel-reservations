@@ -86,3 +86,31 @@ export const registerService = async (data: RegisterData): Promise<boolean> => {
     throw new Error(error.response?.data?.message || 'Falha ao realizar cadastro');
   }
 };
+
+export const getUserRole = (): 'CLIENTE' | 'GERENTE' | null => {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+  
+  try {
+    const payloadBase64 = token.split('.')[1];
+    const decodedJson = atob(payloadBase64);
+    const decoded = JSON.parse(decodedJson);
+    return decoded.role || decoded.authorities?.[0] || 'CLIENTE';
+  } catch (e) {
+    return null;
+  }
+};
+
+export const getUserEmail = (): string | null => {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+  
+  try {
+    const payloadBase64 = token.split('.')[1];
+    const decodedJson = atob(payloadBase64);
+    const decoded = JSON.parse(decodedJson);
+    return decoded.sub || decoded.email || null;
+  } catch (e) {
+    return null;
+  }
+};

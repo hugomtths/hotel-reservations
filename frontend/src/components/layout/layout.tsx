@@ -2,8 +2,12 @@ import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import { Github, Globe, Hotel } from 'lucide-react';
 import styles from './Layout.module.css';
+import { getUserRole } from '../../services/authService';
 
 const MainLayout: React.FC = () => {
+  const userRole = getUserRole();
+  const isManager = userRole === 'GERENTE';
+
   return (
     <div className={styles.container}>
       
@@ -35,9 +39,21 @@ const MainLayout: React.FC = () => {
           Reservas
           </Link>
 
+          {isManager && (
+            <Link 
+              to="/home/relatorios" 
+              className={styles.navLink}
+            >
+            Relatórios
+            </Link>
+          )}
+
           <Link 
             to="/" 
             className={styles.navLink}
+            onClick={() => {
+              localStorage.removeItem('token');
+            }}
           >
           Sair
           </Link>

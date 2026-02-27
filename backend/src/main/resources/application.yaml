@@ -97,5 +97,5 @@ app:
     enabled: false
 
 jwt:
-  secret: ${JWT_SECRET:rjfoBSJbdo2DWCXzgWw42ug9VndCxurWHfAh71kq36o=}
+  secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION_MS:86400000} # 24 horas em milissegundos

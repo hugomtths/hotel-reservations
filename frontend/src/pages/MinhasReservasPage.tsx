@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import styles from './MinhasReservasPage.module.css';
 import ReservationCard, { type ReservationCardProps } from '../components/reservations/ReservationCard';
 import { getReservationsByEmail, cancelReservationService } from '../services/reservationService';
+import { getUserRole, getUserEmail } from '../services/authService';
 
 export default function MinhasReservasPage() {
   const [email, setEmail] = useState('');
@@ -10,10 +11,42 @@ export default function MinhasReservasPage() {
   const [reservations, setReservations] = useState<ReservationCardProps[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [error, setError] = useState('');
+  
+  const userRole = getUserRole();
+  const userEmail = getUserEmail();
+  const isManager = userRole === 'GERENTE';
+
+  // Efeito para carregar reservas automaticamente ao montar a página
+  useEffect(() => {
+    const loadInitialReservations = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        if (isManager) {
+          // Gerente: carrega todas as reservas inicialmente
+          const results = await getReservationsByEmail(); // Sem email = todas
+          setReservations(results);
+          setHasSearched(true);
+        } else if (userEmail) {
+          // Cliente: carrega apenas suas reservas
+          const results = await getReservationsByEmail(userEmail);
+          setReservations(results);
+          setHasSearched(true);
+        }
+      } catch (err) {
+        console.error('Erro ao carregar reservas:', err);
+        setError('Não foi possível carregar as reservas.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadInitialReservations();
+  }, [isManager, userEmail]);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+    if (!email && !isManager) return; // Cliente precisa ter email (mas aqui o form nem deve aparecer)
     
     setLoading(true);
     setHasSearched(false);
@@ -21,9 +54,11 @@ export default function MinhasReservasPage() {
     setReservations([]);
     
     try {
-      // Chama o serviço para buscar reservas
-      // O serviço decide se usa MOCK ou API real baseado no .env
-      const results = await getReservationsByEmail(email);
+      // Se for gerente e o campo de busca estiver vazio, busca todas novamente
+      // Se tiver email preenchido, busca específicas
+      const searchEmail = email || undefined;
+      const results = await getReservationsByEmail(searchEmail);
+      
       setReservations(results);
       setHasSearched(true);
     } catch (error) {
@@ -37,8 +72,6 @@ export default function MinhasReservasPage() {
   const handleCancel = async (id: string) => {
     if (confirm(`Tem certeza que deseja cancelar a reserva ${id}?`)) {
       try {
-        // Chama o serviço para cancelar reserva
-        // O serviço decide se usa MOCK ou API real
         const success = await cancelReservationService(id);
         if (success) {
           setReservations(prev => prev.map(res => 
@@ -57,53 +90,50 @@ export default function MinhasReservasPage() {
   return (
     <div className={styles.container}>
       
-      {/* Seção de Busca */}
       <div className={styles.searchContainer}>
         <h1 className={styles.title}>
-          Consultar Histórico
+          {isManager ? 'Gerenciar Reservas' : 'Minhas Reservas'}
         </h1>
 
-        <form onSubmit={handleSearch} className={styles.form}>
-          <div className={styles.inputWrapper}>
-            <input
-              type="email"
-              placeholder="E-mail"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className={styles.input}
-            />
-          </div>
-          
-          <button 
-            type="submit"
-            disabled={loading}
-            className={styles.button}
-          >
-            <Search size={24} />
-          </button>
-        </form>
+        {/* Formulário de busca visível APENAS para Gerentes */}
+        {isManager && (
+          <form onSubmit={handleSearch} className={styles.form}>
+            <div className={styles.inputWrapper}>
+              <input
+                type="email"
+                placeholder="Buscar por e-mail (deixe vazio para ver todas)"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={styles.input}
+              />
+            </div>
+            
+            <button 
+              type="submit"
+              disabled={loading}
+              className={styles.button}
+              title="Buscar"
+            >
+              <Search size={24} />
+            </button>
+          </form>
+        )}
 
         {error && (
           <p className={styles.errorMessage} style={{ color: '#ef4444' }}>
             {error}
           </p>
         )}
-
-        {!hasSearched && !loading && !error && (
-          <p className={styles.errorMessage}>
-            Digite o E-mail para consultar o histórico de reservas!
-          </p>
-        )}
         
         {hasSearched && reservations.length === 0 && !error && (
            <p className={styles.errorMessage}>
-             Esse e-mail não possui nenhuma reserva.
+             Nenhuma reserva encontrada.
            </p>
         )}
       </div>
 
       {/* Seção de Resultados */}
-      {hasSearched && reservations.length > 0 && (
+      {reservations.length > 0 && (
         <div className={styles.resultsContainer}>
           {reservations.map(res => (
             <ReservationCard 

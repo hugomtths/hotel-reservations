@@ -1,0 +1,36 @@
+spring:
+  config:
+    activate:
+      on-profile: prod # rodar o projeto com docker sem seeder
+
+  flyway:
+    enabled: true
+    locations:
+    - classpath:db/migration
+    baseline-on-migrate: false
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+  datasource:
+    url: ${HOTEL_RESERVATIONS_DB_URL}
+    username: ${HOTEL_RESERVATIONS_DB_USERNAME}
+    password: ${HOTEL_RESERVATIONS_DB_PASSWORD}
+
+app:
+  seed:
+    enabled: false
+  errors:
+    include-stacktrace: false
+
+  bootstrap-gerente:
+    enabled: ${BOOTSTRAP_GERENTE_ENABLED:true}
+    email: ${BOOTSTRAP_GERENTE_EMAIL}
+    password: ${BOOTSTRAP_GERENTE_PASSWORD}
+    nome: ${BOOTSTRAP_GERENTE_NOME}
+    matricula: ${BOOTSTRAP_GERENTE_MATRICULA}
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION_MS}

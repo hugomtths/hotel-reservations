@@ -1,0 +1,42 @@
+spring:
+  config:
+    activate:
+      on-profile: dev # rodar o projeto no docker com seeder
+
+  flyway:
+    enabled: false
+    locations:
+      - classpath:db/migration
+      - classpath:db/migration-dev
+    baseline-on-migrate: false
+
+  datasource:
+    url: jdbc:postgresql://db:5432/hotel_reservations_dev
+    username: hotel_reservations_dev_app
+    password: ${HOTEL_RESERVATIONS_DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  web:
+    error:
+      include-stacktrace: always
+      include-exception: true
+      include-message: always
+      include-binding-errors: always
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: DEBUG
+
+app:
+  seed:
+    enabled: true
+  errors:
+    include-stacktrace: true

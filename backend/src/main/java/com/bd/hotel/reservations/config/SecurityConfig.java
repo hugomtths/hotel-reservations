@@ -30,7 +30,6 @@ public class SecurityConfig {
     private static final String[] PUBLIC_ENDPOINTS = {
             "/auth/**",
             "/error",
-            "/reservas"
     };
 
     private static final String[] PUBLIC_CATALOG_ENDPOINTS = {

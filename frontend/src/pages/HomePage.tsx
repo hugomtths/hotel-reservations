@@ -184,10 +184,11 @@ const HomePage = () => {
               <RoomCard 
                 key={room.id}
                 id={room.id}
-                type={room.tipo} // Ajustado para bater com o DTO
-                description={`Quarto número ${room.numero}`} // Complemento visual
-                date={`${booking.checkIn} até ${booking.checkOut}`}
-                price={`R$ ${room.preco} / noite`} // Ajustado para bater com o DTO
+                type={room.tipo} 
+                description={`Quarto número ${room.numero}`} 
+                checkIn={booking.checkIn} 
+                checkOut={booking.checkOut}
+                price={`R$ ${room.preco} / noite`}
                 image={room.image || "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=600&q=80"}
               />
             ))}

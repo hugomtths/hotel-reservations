@@ -115,9 +115,7 @@ Use o arquivo `.env.example` como base:
 HOTEL_RESERVATIONS_DB_PASSWORD=mude_a_senha_aqui
 
 # Profile ativo do Spring Boot
-# docker = Docker com seed
-# prod   = Docker sem seed
-SPRING_PROFILES_ACTIVE=docker
+SPRING_PROFILES_ACTIVE=dev
 
 # Origens permitidas para CORS (opcional)
 # Se não definir, o backend usa o valor padrão do application.yml
@@ -125,6 +123,10 @@ CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173
 
 # Versão da aplicação (opcional)
 APP_VERSION=dev
+
+# Configurações para JWT
+JWT_SECRET=rjfoBSJbdo2DWCXzgWw42ug9VndCxurWHfAh71kq36o=
+JWT_EXPIRATION_MS=86400000
 ```
 
 Crie o seu **`.env`** copiando o exemplo:
@@ -163,7 +165,7 @@ Exemplo de execução do backend:
 
 #### Execução com Docker (com seed)
 
-- **`SPRING_PROFILES_ACTIVE=docker`**
+- **`SPRING_PROFILES_ACTIVE=dev`**
 - Banco e backend sobem via Docker Compose
 - Seeder é executado automaticamente
 - Migrations padrão + migrations de desenvolvimento
@@ -219,6 +221,7 @@ docker compose down -v
 
 ### Serviços disponíveis
 
+* Frontend: [http://localhost:5173](http://localhost:5173)
 * Backend: [http://localhost:8080](http://localhost:8080)
 * Banco de Dados: localhost:5433
 

@@ -239,9 +239,39 @@ A base de dados inicial do sistema foi populada com o auxílio de Inteligência 
 
 ## Instruções de Uso
 
-No estado atual, o projeto não possui funcionalidades de uso final, servindo apenas como **base estrutural** para o desenvolvimento futuro.
+### Credenciais Padrão (Seed)
 
-As instruções de uso serão atualizadas conforme novas funcionalidades forem implementadas.
+O sistema já possui usuários cadastrados para testes:
+
+#### Gerente
+- **Email:** gerente@local.dev  
+- **Senha:** password  
+
+#### Cliente
+- **Email:** user1@local.dev  
+- **Senha:** password1  
+
+---
+
+### Funcionalidades Disponíveis
+
+#### Integração de Cadastro
+Permite o cadastro de novos usuários no sistema.
+
+#### Integração de Login
+Autenticação via email e senha, com geração de token JWT.
+
+#### Integração de Reservas Detalhadas
+Consulta detalhada das reservas realizadas, incluindo dados de quartos e período, no perfil de gerente.
+
+#### Integração de Quartos Disponíveis
+Listagem de quartos disponíveis para um intervalo de datas informado, na homepage
+
+#### Integração de Quarto por ID
+Consulta individual de um quarto específico
+
+#### Integração de Cadastro de Reserva
+Criação de nova reserva informando cliente, período e quarto desejado.
 
 ---
 

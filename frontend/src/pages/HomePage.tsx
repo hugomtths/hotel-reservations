@@ -1,19 +1,19 @@
 import { useState } from "react";
 import DateInput from "../components/ui/Date";
-import { Search } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
 import styles from "./HomePage.module.css";
 import RoomCard from "../components/room/RoomCard";
 import toast from "react-hot-toast";
-import stylesHorizon from "../components/layout/Layout.module.css"
+import stylesHorizon from "../components/layout/Layout.module.css";
 
-const MOCK_ROOMS = [
-  { id: 1, type: "Standart", description: "Cama única de solteiro", date: "21 - 27 de mar.", price: "R$150 noite", image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=600&q=80" },
-  { id: 2, type: "Suíte", description: "Duas camas de casal", date: "23 de mar. - 25 de mar.", price: "R$400 noite", image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80" },
-  { id: 3, type: "Suíte", description: "Cama única de casal e duas camas de solteiro", date: "31 de mar. - 17 de abr.", price: "R$420 noite", image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80" },
-  { id: 4, type: "Standart", description: "Cama única de casal", date: "20 - 29 de mar.", price: "R$200 noite", image: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=600&q=80" },
-  { id: 5, type: "Standart", description: "Duas camas de solteiro", date: "22 de mar. - 05 de abr.", price: "R$220 noite", image: "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=600&q=80" },
-  { id: 6, type: "Standart", description: "Cama única de casal", date: "02 de abr. - 25 abr.", price: "R$200 noite", image: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&w=600&q=80" },
-];
+// Interface atualizada conforme seu QuartoDisponivelResponse do Backend
+interface QuartoDisponivel {
+  id: number;
+  numero: string;
+  tipo: string; // Mudado de categoriaNome para tipo
+  preco: number; // Mudado de precoDiaria para preco
+  image?: string; // Mudado de imageUrl para image
+}
 
 const HomePage = () => {
   const [booking, setBooking] = useState({
@@ -21,7 +21,12 @@ const HomePage = () => {
     checkOut: "",
   });
 
+  const [rooms, setRooms] = useState<QuartoDisponivel[]>([]);
   const [showCatalog, setShowCatalog] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // ID do hotel fixo conforme sua descoberta
+  const HOTEL_ID = 1;
 
   const handleChange = (event: { target: { name: string; value: string } }) => {
     const { name, value } = event.target;
@@ -30,21 +35,20 @@ const HomePage = () => {
     if (showCatalog) setShowCatalog(false);
   };
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     const { checkIn, checkOut } = booking;
 
     if (!checkIn || !checkOut) {
-      toast.error("Por favor, preencha as datas de entrada e saída.", 
-      );
+      toast.error("Por favor, preencha as datas de entrada e saída.");
       return;
     }
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const todayDate = new Date();
+    todayDate.setHours(0, 0, 0, 0);
     const dateIn = new Date(checkIn);
     const dateOut = new Date(checkOut);
 
-    if (dateIn < today) {
+    if (dateIn < todayDate) {
       toast.error("A data de entrada não pode ser no passado!");
       return;
     }
@@ -54,7 +58,31 @@ const HomePage = () => {
       return;
     }
 
-    setShowCatalog(true);
+    setIsLoading(true);
+    try {
+      console.log("Datas:", checkIn, checkOut)
+      const response = await fetch(
+        `http://localhost:8080/quartos/disponiveis?start=${checkIn}&end=${checkOut}&hotelId=${HOTEL_ID}`
+      );
+
+      if (!response.ok) {
+        const errorBody = await response.json();
+        throw new Error(errorBody.detail || "Falha na resposta do servidor");
+      }
+
+      const data = await response.json();
+      setRooms(data);
+      setShowCatalog(true);
+      
+      if (data.length === 0) {
+        toast.error("Nenhum quarto disponível para este período.");
+      }
+    } catch (error) {
+      console.error("Erro ao buscar quartos:", error);
+      toast.error("Erro ao conectar com o servidor. Verifique se o backend está rodando.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const today = new Date().toISOString().split('T')[0];
@@ -81,7 +109,6 @@ const HomePage = () => {
               </div>
           </h1>
           
-          {/* Adicionada a classe heroSubtitle */}
           <h3 className={styles.heroSubtitle}>
               Experiência de luxo e conforto em cada detalhe da sua estadia
           </h3>
@@ -101,7 +128,7 @@ const HomePage = () => {
                 onChange={handleChange}
                 message="Data de Entrada"
                 required={false}
-                disabled={false}
+                disabled={isLoading}
                 min={today}
               />
             </div>
@@ -114,7 +141,7 @@ const HomePage = () => {
                 onChange={handleChange}
                 message="Data de Saída"
                 required={false}
-                disabled={false}
+                disabled={isLoading}
                 min={booking.checkIn || today}
               />
             </div>
@@ -123,8 +150,13 @@ const HomePage = () => {
               className={styles.searchButton} 
               aria-label="Buscar disponibilidade"
               onClick={handleSearch}
+              disabled={isLoading}
             >
-              <Search size={24} strokeWidth={2.5} />
+              {isLoading ? (
+                <Loader2 size={24} className={styles.spinner} />
+              ) : (
+                <Search size={24} strokeWidth={2.5} />
+              )}
             </button>
           </div>
           
@@ -140,18 +172,24 @@ const HomePage = () => {
         <main className={styles.catalogSection}>
           <header className={styles.catalogHeader}>
             <h1 className={styles.catalogTitle}>Catálogo de Quartos</h1>
-            <p className={styles.catalogSubtitle}>Quartos disponíveis</p>
+            <p className={styles.catalogSubtitle}>
+              {rooms.length > 0 
+                ? `${rooms.length} acomodações encontradas` 
+                : "Nenhuma acomodação disponível"}
+            </p>
           </header>
 
           <div className={styles.roomsGrid}>
-            {MOCK_ROOMS.map((room) => (
+            {rooms.map((room) => (
               <RoomCard 
+                key={room.id}
                 id={room.id}
-                type={room.type}
-                description={room.description}
-                date={room.date}
-                price={room.price}
-                image={room.image}
+                type={room.tipo} 
+                description={`Quarto número ${room.numero}`} 
+                checkIn={booking.checkIn} 
+                checkOut={booking.checkOut}
+                price={`R$ ${room.preco} / noite`}
+                image={room.image || "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=600&q=80"}
               />
             ))}
           </div>

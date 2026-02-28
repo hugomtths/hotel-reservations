@@ -30,7 +30,7 @@ const LoginForm: React.FC = () => {
       await loginService(formData.email, formData.password);
       
       // Se login for bem sucedido, redireciona para a Home
-      navigate('/home');
+      navigate('/home', { replace: true });
     } catch (err) {
       // Captura erros do backend (ex: "Credenciais inválidas")
       setError(err instanceof Error ? err.message : 'Falha no login');

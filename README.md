@@ -106,7 +106,16 @@ Atualmente, o projeto encontra-se na fase de **implementação e validação do 
 ### Configuração de ambiente (.env)
 
 Este projeto **não versiona arquivos `.env`**.  
-Você **deve criar um arquivo `.env` próprio na raiz do projeto** antes de executar a aplicação.
+Você **deve criar dois arquivos `.env` próprios**:
+
+- Um na **raiz do projeto (backend)**
+- Um dentro da pasta **frontend/**
+
+Sem esses arquivos corretamente configurados, a aplicação não funcionará como esperado.
+
+---
+
+## 1️⃣ Backend (.env na raiz)
 
 Use o arquivo `.env.example` como base:
 
@@ -129,39 +138,47 @@ JWT_SECRET=rjfoBSJbdo2DWCXzgWw42ug9VndCxurWHfAh71kq36o=
 JWT_EXPIRATION_MS=86400000
 ```
 
-Crie o seu **`.env`** copiando o exemplo:
+Crie o seu `.env` copiando o exemplo:
 
 ```bash
 cp .env.example .env
 ```
 
-E ajuste os valores conforme necessário.
+Depois, ajuste os valores conforme necessário (principalmente senha do banco).
+
+---
+
+## 2️⃣ Frontend (frontend/.env)
+
+Dentro da pasta:
+
+```
+frontend/
+```
+
+Crie o arquivo:
+
+```
+.env
+```
+
+Com o seguinte conteúdo:
+
+```env
+# URL da API do Backend
+VITE_API_URL=http://localhost:8080
+
+# Define se a aplicação deve usar dados falsos (Mock) ou backend real
+# true  = Usa dados locais
+# false = Conecta na API real
+VITE_USE_MOCK=false
+```
 
 ---
 
 ### Perfis de execução do projeto
 
-O projeto possui três formas principais de execução, controladas via **`SPRING_PROFILES_ACTIVE`** no **`.env`**
-
-#### Execução local (sem Docker, sem seed)
-
-- Profile não definido ou diferente de **`docker`** e **`prod`**
-- Banco PostgreSQL deve existir localmente
-- Não executa seeder
-- Flyway roda apenas migrations padrão 
-
-Configuração usada:
-- Database: **`hotel_reservations_dev`**
-- User: **`hotel_reservations_dev_app`**
-- Password: **`valor de HOTEL_RESERVATIONS_DB_PASSWORD`**
-
-Antes de rodar, é **obrigatório criar o usuário e o banco localmente.**
-
-Exemplo de execução do backend:
-
-```bash
-./mvnw spring-boot:run
-```
+O projeto possui duas formas principais de execução, controladas via **`SPRING_PROFILES_ACTIVE`** no **`.env`**
 
 #### Execução com Docker (com seed)
 
@@ -186,6 +203,12 @@ Esse profile simula o comportamento de produção.
 ---
 
 ### Subindo a aplicação com Docker Compose
+
+Para remover os volumes e reiniciar o banco do zero:
+
+```bash
+docker compose down -v
+```
 
 Na raiz do projeto, execute:
 
@@ -213,12 +236,6 @@ docker exec -it hotel-reservations-db-1 psql -U hotel_reservations_dev_app -d ho
 docker compose down
 ```
 
-Para remover os volumes e reiniciar o banco do zero:
-
-```bash
-docker compose down -v
-```
-
 ### Serviços disponíveis
 
 * Frontend: [http://localhost:5173](http://localhost:5173)
@@ -239,9 +256,50 @@ A base de dados inicial do sistema foi populada com o auxílio de Inteligência 
 
 ## Instruções de Uso
 
-No estado atual, o projeto não possui funcionalidades de uso final, servindo apenas como **base estrutural** para o desenvolvimento futuro.
+### Credenciais Padrão (Seed)
 
-As instruções de uso serão atualizadas conforme novas funcionalidades forem implementadas.
+O sistema já possui usuários cadastrados para testes:
+
+#### Gerente
+- **Email:** funcionario@local.dev
+- **Senha:** password  
+
+#### Cliente
+- **Email:** user1@local.dev  
+- **Senha:** password1  
+
+---
+
+### Funcionalidades Disponíveis
+
+#### Integração de Cadastro
+Permite o cadastro de novos usuários no sistema.
+
+#### Integração de Login
+Autenticação via email e senha, com geração de token JWT.
+
+#### Integração de Reservas Detalhadas
+Consulta detalhada das reservas realizadas, incluindo dados de quartos e período, no perfil de gerente.
+
+#### Integração de Quartos Disponíveis
+Listagem de quartos disponíveis para um intervalo de datas informado, na homepage
+
+#### Integração de Quarto por ID
+Consulta individual de um quarto específico
+
+#### Integração de Cadastro de Reserva
+Criação de nova reserva informando cliente, período e quarto desejado.
+
+#### Integração de relatório
+Consulta dados administrativos do sistema
+
+### Observação sobre o uso de Views
+
+As funcionalidades de **Reservas Detalhadas**, **Quartos Disponíveis** e **Relatório** utilizam *views* no banco de dados.
+
+A principal vantagem é que, em vez de a aplicação precisar buscar vários IDs e depois realizar múltiplas consultas adicionais para montar a resposta, as junções entre tabelas já são feitas diretamente no banco.
+
+Exemplo da view de reservas, que junta as tabelas de cliente e quarto para informar dados dessas tabelas sem consultas adicionais.
 
 ---
 

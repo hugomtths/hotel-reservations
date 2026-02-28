@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import { 
   TrendingUp, 
   CalendarCheck, 
@@ -8,16 +9,33 @@ import {
 } from 'lucide-react';
 import styles from './RelatorioPage.module.css';
 
-// Mock Data (temporário até conectar com backend)
-const MOCK_METRICS = {
-  totalReservas: 154,
-  reservasAtivasHoje: 12,
-  receitaEstimadaTotal: 45200.00,
-  receitaMesAtual: 12500.00,
-  taxaOcupacaoHoje: 65 // em porcentagem
-};
+import { relatorioService, type RelatorioData } from '../services/relatorioService';
 
 const RelatorioPage: React.FC = () => {
+  const [dados, setDados] = useState<RelatorioData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [erro, setErro] = useState<string | null>(null);
+
+  useEffect(() => {
+    const buscarDados = async () => {
+      try {
+        const resultado = await relatorioService.obterRelatorioGeral();
+        setDados(resultado);
+      } catch (error) {
+        setErro('Erro ao carregar o relatório.' + error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    buscarDados();
+  }, []);
+  
+
+  if (loading) return <div className={styles.container}>Carregando métricas...</div>;
+  if (erro) return <div className={styles.container}>{erro}</div>;
+  if (!dados) return null;
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -35,7 +53,7 @@ const RelatorioPage: React.FC = () => {
             </div>
           </div>
           <div className={styles.cardContent}>
-            <span className={styles.metricValue}>{MOCK_METRICS.totalReservas}</span>
+            <span className={styles.metricValue}>{dados.totalReservas}</span>
             <span className={styles.metricLabel}>reservas registradas</span>
           </div>
         </div>
@@ -49,7 +67,7 @@ const RelatorioPage: React.FC = () => {
             </div>
           </div>
           <div className={styles.cardContent}>
-            <span className={styles.metricValue}>{MOCK_METRICS.reservasAtivasHoje}</span>
+            <span className={styles.metricValue}>{dados.reservasAtivasHoje}</span>
             <span className={styles.metricLabel}>hóspedes presentes</span>
           </div>
         </div>
@@ -64,7 +82,7 @@ const RelatorioPage: React.FC = () => {
           </div>
           <div className={styles.cardContent}>
             <span className={styles.metricValue}>
-              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(MOCK_METRICS.receitaEstimadaTotal)}
+              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dados.receitaEstimadaTotal)}
             </span>
             <span className={styles.metricLabel}>acumulado histórico</span>
           </div>
@@ -80,7 +98,7 @@ const RelatorioPage: React.FC = () => {
           </div>
           <div className={styles.cardContent}>
             <span className={styles.metricValue}>
-              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(MOCK_METRICS.receitaMesAtual)}
+              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dados.receitaMesAtual)}
             </span>
             <span className={styles.metricLabel}>faturamento corrente</span>
           </div>
@@ -95,11 +113,11 @@ const RelatorioPage: React.FC = () => {
             </div>
           </div>
           <div className={styles.cardContent}>
-            <span className={styles.metricValue}>{MOCK_METRICS.taxaOcupacaoHoje}%</span>
+            <span className={styles.metricValue}>{dados.taxaOcupacaoHoje}%</span>
             <div className={styles.progressBarBg}>
               <div 
                 className={styles.progressBarFill} 
-                style={{ width: `${MOCK_METRICS.taxaOcupacaoHoje}%` }}
+                style={{ width: `${dados.taxaOcupacaoHoje}%` }}
               ></div>
             </div>
             <span className={styles.metricLabel}>dos quartos ocupados</span>

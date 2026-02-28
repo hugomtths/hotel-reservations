@@ -28,22 +28,20 @@ function App() {
       />
 
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<LoginPage />} />
         <Route path="/cadastro" element={<CadastroPage />} />
         
-        <Route path="/" element={<MainLayout />}>
+        <Route element={<MainLayout />}>
           
-          <Route index element={<Home />} />
+          <Route path="/home" index element={<Home />} />
           
-          <Route path="cadastro" element={<CadastroPage />} />
+          <Route path="home/reservas" element={<MinhasReservasPage />} />
 
-          <Route path="reservas" element={<MinhasReservasPage />} />
+          <Route path="quarto/:id" element={<RoomPage />} />
 
-          <Route path="/quarto/:id" element={<RoomPage />} />
+          <Route path="reserva/confirmacao/:id" element={<ReservationConfirm />} />
 
-          <Route path="/reserva/confirmacao/:id" element={<ReservationConfirm />} />
-
-          <Route path="relatorios" element={<RelatorioPage />} />
+          <Route path="home/relatorios" element={<RelatorioPage />} />
           
         </Route>
       </Routes>

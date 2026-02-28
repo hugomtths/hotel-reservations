@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import styles from './MinhasReservasPage.module.css';
 import ReservationCard, { type ReservationCardProps } from '../components/reservations/ReservationCard';
-import { getReservationsByEmail, cancelReservationService } from '../services/reservationService';
+import { getReservationsByEmail, cancelReservationService, getDetailedReservations } from '../services/reservationService';
 import { getUserRole, getUserEmail } from '../services/authService';
 
 export default function MinhasReservasPage() {
@@ -23,8 +23,8 @@ export default function MinhasReservasPage() {
       setError('');
       try {
         if (isManager) {
-          // Gerente: carrega todas as reservas inicialmente
-          const results = await getReservationsByEmail(); // Sem email = todas
+          // Gerente: carrega todas as reservas detalhadas inicialmente
+          const results = await getDetailedReservations(); 
           setReservations(results);
           setHasSearched(true);
         } else if (userEmail) {
@@ -57,7 +57,14 @@ export default function MinhasReservasPage() {
       // Se for gerente e o campo de busca estiver vazio, busca todas novamente
       // Se tiver email preenchido, busca específicas
       const searchEmail = email || undefined;
-      const results = await getReservationsByEmail(searchEmail);
+      
+      let results;
+      if (isManager) {
+        results = await getDetailedReservations(searchEmail);
+      } else {
+        // Cliente buscando (embora a UI não mostre busca para cliente)
+        results = await getReservationsByEmail(searchEmail);
+      }
       
       setReservations(results);
       setHasSearched(true);

@@ -10,7 +10,7 @@ export interface ReservationCardProps {
   clientPhone: string;
   roomNumber: string;
   roomCategory: string;
-  roomCapacity: string;
+  roomCapacity: string | number;
   pricePerNight: number;
   totalValue: number;
   stayDuration: string;

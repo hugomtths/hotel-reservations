@@ -273,6 +273,17 @@ Consulta individual de um quarto específico
 #### Integração de Cadastro de Reserva
 Criação de nova reserva informando cliente, período e quarto desejado.
 
+#### Integração de relatório
+Consulta dados administrativos do sistema
+
+### Observação sobre o uso de Views
+
+As funcionalidades de **Reservas Detalhadas**, **Quartos Disponíveis** e **Relatório** utilizam *views* no banco de dados.
+
+A principal vantagem é que, em vez de a aplicação precisar buscar vários IDs e depois realizar múltiplas consultas adicionais para montar a resposta, as junções entre tabelas já são feitas diretamente no banco.
+
+Exemplo da view de reservas, que junta as tabelas de cliente e quarto para informar dados dessas tabelas sem consultas adicionais.
+
 ---
 
 ## Guia de Contribuição

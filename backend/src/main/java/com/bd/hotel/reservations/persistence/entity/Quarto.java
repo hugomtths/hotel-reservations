@@ -24,7 +24,7 @@ public class Quarto {
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotel_id", nullable = false)
+    @JoinColumn(name = "hotelId", nullable = false)
     private Hotel hotel;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)

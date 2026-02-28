@@ -1,10 +1,16 @@
 package com.bd.hotel.reservations.application.service;
 
+import com.bd.hotel.reservations.exception.notfound.QuartoNotFoundException;
+import com.bd.hotel.reservations.persistence.entity.Quarto;
+import com.bd.hotel.reservations.persistence.repository.QuartoRepository;
 import com.bd.hotel.reservations.persistence.repository.QuartosDisponiveisViewRepository;
 import com.bd.hotel.reservations.persistence.repository.QuartosDisponiveisViewRowDto;
 import com.bd.hotel.reservations.web.dto.response.QuartoDisponivelResponse;
+import com.bd.hotel.reservations.web.dto.response.QuartoResponse;
 import com.bd.hotel.reservations.web.mapper.QuartoDisponivelMapper;
+import com.bd.hotel.reservations.web.mapper.QuartoMapper;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,5 +48,21 @@ public class QuartoService {
         }
 
         return out;
+    }
+
+    private final QuartoRepository quartoRepository;
+    private final QuartoMapper quartoMapper;
+
+    @Transactional(readOnly = true)
+    public QuartoResponse buscarPorId(Long id) {
+        Quarto quarto = quartoRepository.findById(id)
+                .orElseThrow(() -> new QuartoNotFoundException(id));
+
+        // evita LazyInitializationException no mapper
+        Hibernate.initialize(quarto.getCategoria());
+        Hibernate.initialize(quarto.getHotel());
+        Hibernate.initialize(quarto.getComodidades());
+
+        return quartoMapper.toResponse(quarto);
     }
 }

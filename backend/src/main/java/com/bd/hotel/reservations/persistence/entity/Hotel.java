@@ -32,13 +32,13 @@ public class Hotel {
 
     @ElementCollection
     @CollectionTable(name = "email_hotel",
-            joinColumns = @JoinColumn(name = "hotel_id", foreignKey = @ForeignKey(name = "fk_email_hotel_hotel")))
+            joinColumns = @JoinColumn(name = "hotelId", foreignKey = @ForeignKey(name = "fk_email_hotel_hotel")))
     @Column(name = "email", nullable = false, length = 150)
     private Set<String> emails = new HashSet<>();
 
     @ElementCollection
     @CollectionTable(name = "telefone_hotel",
-            joinColumns = @JoinColumn(name = "hotel_id", foreignKey = @ForeignKey(name = "fk_telefone_hotel_hotel")))
+            joinColumns = @JoinColumn(name = "hotelId", foreignKey = @ForeignKey(name = "fk_telefone_hotel_hotel")))
     @Column(name = "telefone", nullable = false, length = 20)
     private Set<String> telefones = new HashSet<>();
 

@@ -28,7 +28,7 @@ public class Funcionario {
     private String cpf;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotel_id", nullable = false,
+    @JoinColumn(name = "hotelId", nullable = false,
             foreignKey = @ForeignKey(name = "fk_funcionario_hotel"))
     private Hotel hotel;
 

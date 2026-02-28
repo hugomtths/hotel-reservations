@@ -6,12 +6,12 @@ import jakarta.persistence.*;
 @Table(name = "endereco")
 class Endereco {
     @Id
-    @Column(name = "hotel_id")
+    @Column(name = "hotelId")
     private Long hotelId;
 
     @MapsId
     @OneToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotel_id", foreignKey = @ForeignKey(name = "fk_endereco_hotel"))
+    @JoinColumn(name = "hotelId", foreignKey = @ForeignKey(name = "fk_endereco_hotel"))
     private Hotel hotel;
 
     @Column(length = 10)

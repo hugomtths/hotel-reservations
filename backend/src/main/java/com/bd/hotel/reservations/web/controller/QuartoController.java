@@ -2,8 +2,10 @@ package com.bd.hotel.reservations.web.controller;
 
 import com.bd.hotel.reservations.application.service.QuartoService;
 import com.bd.hotel.reservations.web.dto.response.QuartoDisponivelResponse;
+import com.bd.hotel.reservations.web.dto.response.QuartoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -24,5 +26,10 @@ public class QuartoController {
             @RequestParam(required = false) Long hotelId
     ) {
         return quartoService.listarDisponiveis(start, endExclusive, hotelId);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<QuartoResponse> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(quartoService.buscarPorId(id));
     }
 }

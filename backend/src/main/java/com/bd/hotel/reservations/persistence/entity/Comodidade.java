@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-class Comodidade {
+public class Comodidade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

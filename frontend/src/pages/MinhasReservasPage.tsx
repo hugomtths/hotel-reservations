@@ -14,7 +14,7 @@ export default function MinhasReservasPage() {
   
   const userRole = getUserRole();
   const userEmail = getUserEmail();
-  const isManager = userRole === 'GERENTE';
+  const isManager = userRole === 'FUNCIONARIO';
 
   // Efeito para carregar reservas automaticamente ao montar a página
   useEffect(() => {

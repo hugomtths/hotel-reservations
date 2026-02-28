@@ -35,13 +35,13 @@ function App() {
           
           <Route path="/home" index element={<Home />} />
           
-          <Route path="reservas" element={<MinhasReservasPage />} />
+          <Route path="home/reservas" element={<MinhasReservasPage />} />
 
           <Route path="quarto/:id" element={<RoomPage />} />
 
           <Route path="reserva/confirmacao/:id" element={<ReservationConfirm />} />
 
-          <Route path="relatorios" element={<RelatorioPage />} />
+          <Route path="home/relatorios" element={<RelatorioPage />} />
           
         </Route>
       </Routes>

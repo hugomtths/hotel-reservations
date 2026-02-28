@@ -1,12 +1,21 @@
-import React from 'react';
-import { Outlet, Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { Github, Globe, Hotel } from 'lucide-react';
 import styles from './Layout.module.css';
 import { getUserRole } from '../../services/authService';
 
 const MainLayout: React.FC = () => {
+  const navigate = useNavigate();
   const userRole = getUserRole();
-  const isManager = userRole === 'GERENTE';
+  const isManager = userRole === 'FUNCIONARIO';
+
+  useEffect(() => {
+    if (!userRole) {
+      navigate('/');
+    }
+  }, [userRole, navigate]);
+
+  if (!userRole) return null;
 
   return (
     <div className={styles.container}>

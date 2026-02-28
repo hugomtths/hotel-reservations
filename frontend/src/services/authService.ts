@@ -76,8 +76,9 @@ export const registerService = async (data: RegisterData): Promise<boolean> => {
       email: data.email,
       password: data.senha,
       nome: data.nome,
-      cpf: data.cpf.replace(/\D/g, ''), // Remove formatação (pontos e traços)
-      celular: data.telefone.replace(/\D/g, '') // Remove formatação do telefone
+      cpf: data.cpf.replace(/\D/g, ''), // Remove formatação
+      telefone: data.telefone.replace(/\D/g, ''), // Backend espera 'telefone', não 'celular'
+      dataNascimento: data.dataNascimento // Deve estar no formato 'YYYY-MM-DD'
     };
     await api.post('/auth/register', payload);
     return true;
@@ -87,7 +88,7 @@ export const registerService = async (data: RegisterData): Promise<boolean> => {
   }
 };
 
-export const getUserRole = (): 'CLIENTE' | 'GERENTE' | null => {
+export const getUserRole = (): 'CLIENTE' | 'FUNCIONARIO' | null => {
   const token = localStorage.getItem('token');
   if (!token) return null;
   

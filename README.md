@@ -106,7 +106,16 @@ Atualmente, o projeto encontra-se na fase de **implementação e validação do 
 ### Configuração de ambiente (.env)
 
 Este projeto **não versiona arquivos `.env`**.  
-Você **deve criar um arquivo `.env` próprio na raiz do projeto** antes de executar a aplicação.
+Você **deve criar dois arquivos `.env` próprios**:
+
+- Um na **raiz do projeto (backend)**
+- Um dentro da pasta **frontend/**
+
+Sem esses arquivos corretamente configurados, a aplicação não funcionará como esperado.
+
+---
+
+## 1️⃣ Backend (.env na raiz)
 
 Use o arquivo `.env.example` como base:
 
@@ -129,39 +138,47 @@ JWT_SECRET=rjfoBSJbdo2DWCXzgWw42ug9VndCxurWHfAh71kq36o=
 JWT_EXPIRATION_MS=86400000
 ```
 
-Crie o seu **`.env`** copiando o exemplo:
+Crie o seu `.env` copiando o exemplo:
 
 ```bash
 cp .env.example .env
 ```
 
-E ajuste os valores conforme necessário.
+Depois, ajuste os valores conforme necessário (principalmente senha do banco).
+
+---
+
+## 2️⃣ Frontend (frontend/.env)
+
+Dentro da pasta:
+
+```
+frontend/
+```
+
+Crie o arquivo:
+
+```
+.env
+```
+
+Com o seguinte conteúdo:
+
+```env
+# URL da API do Backend
+VITE_API_URL=http://localhost:8080
+
+# Define se a aplicação deve usar dados falsos (Mock) ou backend real
+# true  = Usa dados locais
+# false = Conecta na API real
+VITE_USE_MOCK=false
+```
 
 ---
 
 ### Perfis de execução do projeto
 
-O projeto possui três formas principais de execução, controladas via **`SPRING_PROFILES_ACTIVE`** no **`.env`**
-
-#### Execução local (sem Docker, sem seed)
-
-- Profile não definido ou diferente de **`docker`** e **`prod`**
-- Banco PostgreSQL deve existir localmente
-- Não executa seeder
-- Flyway roda apenas migrations padrão 
-
-Configuração usada:
-- Database: **`hotel_reservations_dev`**
-- User: **`hotel_reservations_dev_app`**
-- Password: **`valor de HOTEL_RESERVATIONS_DB_PASSWORD`**
-
-Antes de rodar, é **obrigatório criar o usuário e o banco localmente.**
-
-Exemplo de execução do backend:
-
-```bash
-./mvnw spring-boot:run
-```
+O projeto possui duas formas principais de execução, controladas via **`SPRING_PROFILES_ACTIVE`** no **`.env`**
 
 #### Execução com Docker (com seed)
 

@@ -227,6 +227,16 @@ docker compose down -v
 
 ---
 
+## População de Dados (Data Seeding)
+
+A base de dados inicial do sistema foi populada com o auxílio de Inteligência Artificial para criar um conjunto de dados fictícios (*mock data*) realista e coerente. O processo foi estruturado nas seguintes etapas:
+
+1. **Mapeamento:** A estrutura das tabelas do banco (como Clientes, Hotéis, Quartos e Reservas) foi utilizada como contexto.
+2. **Geração:** A IA elaborou scripts SQL de `INSERT` com registros diversificados, respeitando os relacionamentos e restrições estruturais do banco (chaves estrangeiras, formatos de data, etc.).
+3. **Execução:** Os scripts foram executados diretamente no banco de dados, garantindo volume de informações suficiente para testes de API e validação das regras de negócio.
+ 
+---
+
 ## Instruções de Uso
 
 No estado atual, o projeto não possui funcionalidades de uso final, servindo apenas como **base estrutural** para o desenvolvimento futuro.

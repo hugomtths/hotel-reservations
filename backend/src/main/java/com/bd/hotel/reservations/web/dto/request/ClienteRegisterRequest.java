@@ -3,6 +3,7 @@ package com.bd.hotel.reservations.web.dto.request;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.time.LocalDate;
 
@@ -26,6 +27,6 @@ public class ClienteRegisterRequest {
     @NotBlank
     private String telefone;
 
-    @NotBlank
+    @NotNull
     private LocalDate dataNascimento;
 }

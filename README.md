@@ -204,6 +204,12 @@ Esse profile simula o comportamento de produção.
 
 ### Subindo a aplicação com Docker Compose
 
+Para remover os volumes e reiniciar o banco do zero:
+
+```bash
+docker compose down -v
+```
+
 Na raiz do projeto, execute:
 
 ```bash
@@ -228,12 +234,6 @@ docker exec -it hotel-reservations-db-1 psql -U hotel_reservations_dev_app -d ho
 
 ```bash
 docker compose down
-```
-
-Para remover os volumes e reiniciar o banco do zero:
-
-```bash
-docker compose down -v
 ```
 
 ### Serviços disponíveis

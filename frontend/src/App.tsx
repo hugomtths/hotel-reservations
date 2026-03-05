@@ -10,6 +10,7 @@ import CadastroPage from './pages/CadastroPage';
 import RoomPage from './pages/RoomPage';
 import ReservationConfirm from './components/reservations/ReservationConfirm';
 import RelatorioPage from './pages/RelatorioPage';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
   return (
@@ -44,6 +45,8 @@ function App() {
           <Route path="reserva/editar/:id" element={<EditReservationPage />} />
 
           <Route path="home/relatorios" element={<RelatorioPage />} />
+
+          <Route path="perfil" element={<ProfilePage />} />
           
         </Route>
       </Routes>

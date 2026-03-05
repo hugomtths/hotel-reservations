@@ -3,7 +3,7 @@ import styles from './ReservationCard.module.css';
 
 export interface ReservationCardProps {
   id: string;
-  status: 'Ativa' | 'Concluída' | 'Cancelada';
+  status: 'Ativa' | 'Concluída' | 'Cancelada' | 'PENDENTE' | 'CONFIRMADA' | 'CONCLUIDA' | 'CANCELADA';
   clientName: string;
   clientEmail: string;
   clientCpf: string;
@@ -19,6 +19,7 @@ export interface ReservationCardProps {
   roomId?: number;
   onCancel?: (id: string) => void;
   onEdit?: (id: string) => void;
+  onDelete?: (id: string) => void;
 }
 
 const ReservationCard: React.FC<ReservationCardProps> = ({
@@ -38,14 +39,22 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
   startDate,
   endDate,
   onCancel,
-  onEdit
+  onEdit,
+  onDelete
 }) => {
   
   const getStatusColor = () => {
     switch (status) {
-      case 'Ativa': return styles.statusActive;
-      case 'Concluída': return styles.statusCompleted;
-      case 'Cancelada': return styles.statusCancelled;
+      case 'Ativa': 
+      case 'PENDENTE':
+      case 'CONFIRMADA':
+        return styles.statusActive;
+      case 'Concluída': 
+      case 'CONCLUIDA':
+        return styles.statusCompleted;
+      case 'Cancelada': 
+      case 'CANCELADA':
+        return styles.statusCancelled;
       default: return '';
     }
   };
@@ -56,6 +65,8 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
       currency: 'BRL'
     }).format(value);
   };
+
+  const isReservationActive = ['Ativa', 'PENDENTE', 'CONFIRMADA'].includes(status);
 
   return (
     <div className={styles.card}>
@@ -165,22 +176,31 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
           </div>
         </div>
 
-        {status === 'Ativa' && (
-          <div className={styles.actions}>
-            <button 
-              className={styles.editButton}
-              onClick={() => onEdit && onEdit(id)}
-            >
-              Editar
-            </button>
+        <div className={styles.actions}>
+            {isReservationActive && (
+              <button 
+                className={styles.editButton}
+                onClick={() => onEdit && onEdit(id)}
+              >
+                Editar
+              </button>
+            )}
             <button 
               className={styles.cancelButton}
-              onClick={() => onCancel && onCancel(id)}
+              onClick={() => onDelete && onDelete(id)}
             >
               Apagar
             </button>
-          </div>
-        )}
+
+            {isReservationActive && (
+              <button 
+                className={styles.cancelStatusButton}
+                onClick={() => onCancel && onCancel(id)}
+              >
+                Cancelar
+              </button>
+            )}
+        </div>
       </div>
 
     </div>

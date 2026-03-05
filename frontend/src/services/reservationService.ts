@@ -210,3 +210,26 @@ export const cancelReservationService = async (id: string): Promise<boolean> => 
     return false;
   }
 };
+
+export const updateReservationService = async (id: string, data: any): Promise<boolean> => {
+  if (USE_MOCK) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        // Mock update logic
+        console.log('Atualizando reserva (MOCK). ID:', id, 'Data:', data);
+        MOCK_RESERVATIONS = MOCK_RESERVATIONS.map(res => 
+            res.id === id ? { ...res, ...data } : res
+        );
+        resolve(true);
+      }, 500);
+    });
+  }
+
+  try {
+    await api.put(`/reservas/${id}`, data);
+    return true;
+  } catch (error) {
+    console.error('Erro ao atualizar reserva:', error);
+    return false;
+  }
+};

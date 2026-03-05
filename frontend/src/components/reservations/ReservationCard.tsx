@@ -16,7 +16,9 @@ export interface ReservationCardProps {
   stayDuration: string;
   startDate: string;
   endDate: string;
+  roomId?: number;
   onCancel?: (id: string) => void;
+  onEdit?: (id: string) => void;
 }
 
 const ReservationCard: React.FC<ReservationCardProps> = ({
@@ -26,6 +28,7 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
   clientEmail,
   clientCpf,
   clientPhone,
+  roomId,
   roomNumber,
   roomCategory,
   roomCapacity,
@@ -34,7 +37,8 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
   stayDuration,
   startDate,
   endDate,
-  onCancel
+  onCancel,
+  onEdit
 }) => {
   
   const getStatusColor = () => {
@@ -162,12 +166,20 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
         </div>
 
         {status === 'Ativa' && (
-          <button 
-            className={styles.cancelButton}
-            onClick={() => onCancel && onCancel(id)}
-          >
-            Cancelar
-          </button>
+          <div className={styles.actions}>
+            <button 
+              className={styles.editButton}
+              onClick={() => onEdit && onEdit(id)}
+            >
+              Editar
+            </button>
+            <button 
+              className={styles.cancelButton}
+              onClick={() => onCancel && onCancel(id)}
+            >
+              Apagar
+            </button>
+          </div>
         )}
       </div>
 

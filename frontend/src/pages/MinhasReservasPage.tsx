@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import styles from './MinhasReservasPage.module.css';
 import ReservationCard, { type ReservationCardProps } from '../components/reservations/ReservationCard';
@@ -76,6 +77,15 @@ export default function MinhasReservasPage() {
     }
   };
 
+  const navigate = useNavigate();
+
+  const handleEdit = (id: string) => {
+    const reservation = reservations.find(r => r.id === id);
+    if (reservation) {
+      navigate(`/reserva/editar/${id}`, { state: reservation });
+    }
+  };
+
   const handleCancel = async (id: string) => {
     if (confirm(`Tem certeza que deseja cancelar a reserva ${id}?`)) {
       try {
@@ -147,6 +157,7 @@ export default function MinhasReservasPage() {
               key={res.id}
               {...res}
               onCancel={handleCancel}
+              onEdit={handleEdit}
             />
           ))}
         </div>

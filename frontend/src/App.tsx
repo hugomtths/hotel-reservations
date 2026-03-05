@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import MainLayout from './components/layout/layout';
 import Home from './pages/HomePage';
 import MinhasReservasPage from './pages/MinhasReservasPage';
+import EditReservationPage from './pages/EditReservationPage';
 import LoginPage from './pages/LoginPage';
 import CadastroPage from './pages/CadastroPage';
 import RoomPage from './pages/RoomPage';
@@ -40,6 +41,7 @@ function App() {
           <Route path="quarto/:id" element={<RoomPage />} />
 
           <Route path="reserva/confirmacao/:id" element={<ReservationConfirm />} />
+          <Route path="reserva/editar/:id" element={<EditReservationPage />} />
 
           <Route path="home/relatorios" element={<RelatorioPage />} />
           

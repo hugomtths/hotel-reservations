@@ -111,6 +111,12 @@
   flex: 1;
 }
 
+.actions {
+  display: flex;
+  gap: 1rem;
+  margin-left: 2rem;
+}
+
 .cancelButton {
   background-color: transparent;
   border: 2px solid #ef4444;
@@ -122,7 +128,6 @@
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
-  margin-left: 2rem;
 }
 
 .cancelButton:hover {
@@ -130,5 +135,26 @@
 }
 
 .cancelButton:active {
+  transform: scale(0.98);
+}
+
+.editButton {
+  background-color: transparent;
+  border: 2px solid #3b82f6;
+  color: #3b82f6;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.editButton:hover {
+  background-color: #eff6ff;
+}
+
+.editButton:active {
   transform: scale(0.98);
 }

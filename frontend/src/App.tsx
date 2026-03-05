@@ -48,7 +48,7 @@ function App() {
 
           <Route path="home/relatorios" element={<RelatorioPage />} />
           
-          <Route element={<ProtectedRoute allowedRole="GERENTE" />}>
+          <Route element={<ProtectedRoute allowedRole="FUNCIONARIO" />}>
             <Route path="/quartos" element={<Rooms />} />
             
             <Route path="/quartos/novo" element={<NewRoomPage />} />

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './NewRoomPage.module.css';
 import toast from 'react-hot-toast';
@@ -10,16 +10,18 @@ interface Item {
 }
 
 interface Categoria {
-    precoDiaria: number;
-    nome: string;
-    capacidade: number;
+  id?: number;
+  precoDiaria: number;
+  nome: string;
+  capacidade: number;
 }
 
 const NewRoomPage: React.FC = () => {
   const navigate = useNavigate();
   const editInputRef = useRef<HTMLInputElement>(null);
-  
-  // Mocks de dados (Esses viriam do useEffect buscando da sua API)
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Dados
   const [categorias, setCategorias] = useState<Item[]>([
     { id: 1, nome: 'Standard Solo' },
     { id: 2, nome: 'Double Deluxe' }
@@ -31,19 +33,29 @@ const NewRoomPage: React.FC = () => {
   ]);
 
   // Estados de Controle
+  const [selectedCat, setSelectedCat] = useState<Item | null>(null);
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [selectedComods, setSelectedComods] = useState<number[]>([]);
   const [isAddingComod, setIsAddingComod] = useState(false);
   const [isAddingCat, setIsAddingCat] = useState(false);
-  const [editingItem, setEditingItem] = useState<{tipo: 'cat' | 'com', item: Item} | null>(null);
+  const [editingItem, setEditingItem] = useState<{ tipo: 'cat' | 'com'; item: Item } | null>(null);
 
-  const handleAddQuick = (nome: string, tipo: 'cat' | 'com') => {
+  // Fechar dropdown ao clicar fora
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsSelectOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleAddQuickComod = (nome: string) => {
     if (!nome.trim()) return;
-    const novoItem = { id: Date.now(), nome }; 
-    
-    if (tipo === 'cat') setCategorias([...categorias, novoItem]);
-    else setComodidades([...comodidades, novoItem]);
-    
-    toast.success(`${tipo === 'cat' ? 'Categoria' : 'Comodidade'} criada!`);
+    const novoItem = { id: Date.now(), nome };
+    setComodidades([...comodidades, novoItem]);
+    toast.success("Comodidade criada!");
   };
 
   const handleUpdate = () => {
@@ -52,24 +64,30 @@ const NewRoomPage: React.FC = () => {
 
     if (editingItem.tipo === 'cat') {
       setCategorias(prev => prev.map(i => i.id === editingItem.item.id ? { ...i, nome: novoNome } : i));
+      if (selectedCat?.id === editingItem.item.id) setSelectedCat({ ...editingItem.item, nome: novoNome });
     } else {
       setComodidades(prev => prev.map(i => i.id === editingItem.item.id ? { ...i, nome: novoNome } : i));
     }
-    
+
     setEditingItem(null);
-    toast.success("Nome atualizado!");
+    toast.success("Atualizado com sucesso!");
   };
 
   const handleDeleteWithConfirm = (id: number, tipo: 'cat' | 'com') => {
     toast((t) => (
       <span className={styles.toastConfirm}>
-        Excluir este item?
-        <button 
+        Excluir {tipo === 'cat' ? 'categoria' : 'comodidade'}?
+        <button
           onClick={() => {
-            if (tipo === 'cat') setCategorias(prev => prev.filter(i => i.id !== id));
-            else setComodidades(prev => prev.filter(i => i.id !== id));
+            if (tipo === 'cat') {
+              setCategorias(prev => prev.filter(i => i.id !== id));
+              if (selectedCat?.id === id) setSelectedCat(null);
+            } else {
+              setComodidades(prev => prev.filter(i => i.id !== id));
+              setSelectedComods(prev => prev.filter(item => item !== id));
+            }
             toast.dismiss(t.id);
-            toast.error("Item removido");
+            toast.error("Removido com sucesso");
           }}
           className={styles.toastBtnSim}
         > Sim </button>
@@ -85,48 +103,36 @@ const NewRoomPage: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    
+
     const payload = {
       numero: formData.get('numero'),
       area: formData.get('area'),
-      status: "DISPONIVEL", 
-      categoria: { id: Number(formData.get('categoria_id')) },
-      comodidades: selectedComods.map(id => ({ id })) 
+      status: "DISPONIVEL",
+      categoria: { id: selectedCat?.id },
+      comodidades: selectedComods.map(id => ({ id }))
     };
 
     if (!payload.categoria.id || !payload.numero) {
-      toast.error("Preencha o número e a categoria!");
+      toast.error("Número e Categoria são obrigatórios!");
       return;
     }
 
-    console.log("Enviando para o Backend:", payload);
+    console.log("Payload Final:", payload);
     toast.success("Quarto cadastrado com sucesso!");
     navigate('/quartos');
   };
 
   const handleSaveCategory = async (novaCat: Categoria) => {
-    try {
-        console.log("Enviando Categoria ao Backend:", novaCat);
-        
-        const categoriaSalva = { ...novaCat, id: Date.now() }; 
-        setCategorias([...categorias, categoriaSalva]);
-        
-        setIsAddingCat(false);
-        toast.success("Categoria cadastrada com sucesso!");
-    } catch (error) {
-        console.error("Erro ao salvar categoria: ", error);
-        toast.error("Erro ao salvar categoria.");
-    }
-    };
+    const categoriaSalva = { id: Date.now(), nome: novaCat.nome };
+    setCategorias([...categorias, categoriaSalva]);
+    setIsAddingCat(false);
+    toast.success("Categoria criada!");
+  };
 
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <button className={styles.backBtn} onClick={() => navigate('/quartos')}>
-          <span className={styles.iconArrow}>←</span>
-          <span>Voltar</span>
-        </button>
-        <h1>Nova Acomodação</h1>
+        <h1>Novo Quarto</h1>
       </header>
 
       <form className={styles.mainForm} onSubmit={handleSubmit}>
@@ -141,61 +147,143 @@ const NewRoomPage: React.FC = () => {
           </div>
         </div>
 
-        {/* CATEGORIA */}
+        {/* SELECT CATEGORIA PERSONALIZADO */}
         <div className={styles.inputGroup}>
           <div className={styles.labelWithAction}>
             <label>Categoria</label>
-            <button 
-              type="button" 
-              className={styles.textActionBtn} 
-              onClick={() => setIsAddingCat(true)}
-            > + Nova Categoria </button>
+            <button type="button" className={styles.textActionBtn} onClick={() => setIsAddingCat(true)}>
+              + Nova Categoria
+            </button>
           </div>
-          
-          <div className={styles.selectWithEdit}>
-            <select name="categoria_id" className={styles.mainSelect} required>
-              <option value="">Selecione uma categoria...</option>
-              {categorias.map(cat => (
-                <option key={cat.id} value={cat.id}>{cat.nome}</option>
-              ))}
-            </select>
-            
-            <div className={styles.quickList}>
-               {categorias.slice(-3).map(cat => (
-                 <span key={cat.id} className={styles.miniLink} onClick={() => setEditingItem({tipo: 'cat', item: cat})}>
-                   Editar {cat.nome}
-                 </span>
-               ))}
+
+          <div className={styles.customSelectContainer} ref={dropdownRef}>
+            <div
+              className={`${styles.customSelectTrigger} ${isSelectOpen ? styles.open : ''}`}
+              onClick={() => setIsSelectOpen(!isSelectOpen)}
+            >
+              <span>{selectedCat ? selectedCat.nome : "Selecione uma categoria..."}</span>
+              <span className={styles.arrow}>{isSelectOpen ? '▲' : '▼'}</span>
             </div>
+
+            {isSelectOpen && (
+              <div className={styles.customOptionsList}>
+                {categorias.map(cat => (
+                  <div key={cat.id} className={styles.customOptionItem}>
+                    <span
+                      className={styles.optionText}
+                      onClick={() => {
+                        setSelectedCat(cat);
+                        setIsSelectOpen(false);
+                      }}
+                    >
+                      {cat.nome}
+                    </span>
+                    <div className={styles.optionActions}>
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); setEditingItem({ tipo: 'cat', item: cat }); }}
+                        className={styles.editIcon}
+                      >
+                        <svg 
+                            width="14" height="14" viewBox="0 0 24 24" fill="none" 
+                            stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                        >
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                      </button>
+                      
+                      <button
+                        type="button"
+                        className={styles.deleteIcon}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteWithConfirm(cat.id, 'cat');
+                        }}
+                        title="Excluir"
+                        >
+                        <svg 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            width="16" 
+                            height="16" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            strokeWidth="2" 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round"
+                        >
+                            <path d="M3 6h18"></path>
+                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                        </svg>
+                        </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* COMODIDADES */}
+        {/* CHIPS DE COMODIDADES */}
         <div className={styles.inputGroup}>
-          <label>Comodidades (Selecione as incluídas)</label>
+          <label>Comodidades</label>
           <div className={styles.chipsGrid}>
             {comodidades.map(com => (
-              <div 
-                key={com.id} 
+              <div
+                key={com.id}
                 className={`${styles.chipWrapper} ${selectedComods.includes(com.id) ? styles.chipSelected : ''}`}
               >
                 <span className={styles.chipText} onClick={() => toggleComod(com.id)}>
                   {com.nome}
                 </span>
                 <div className={styles.chipActions}>
-                  <button type="button" onClick={() => setEditingItem({tipo: 'com', item: com})}>✎</button>
-                  <button type="button" className={styles.del} onClick={() => handleDeleteWithConfirm(com.id, 'com')}>×</button>
+                    <button 
+                        type="button" 
+                        className={styles.editIcon}
+                        onClick={() => setEditingItem({ tipo: 'com', item: com })}
+                        title="Editar"
+                    >
+                        <svg 
+                        width="14" height="14" viewBox="0 0 24 24" fill="none" 
+                        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                        >
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                    </button>
+
+                    {/* ÍCONE DE EXCLUSÃO (LIXEIRA) */}
+                    <button 
+                        type="button" 
+                        className={styles.deleteIcon} 
+                        onClick={() => handleDeleteWithConfirm(com.id, 'com')}
+                        title="Excluir"
+                    >
+                        <svg 
+                        width="14" height="14" viewBox="0 0 24 24" fill="none" 
+                        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                        >
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                        </svg>
+                    </button>
                 </div>
               </div>
             ))}
-            
+
             {isAddingComod ? (
-              <input 
-                className={styles.inlineInput} 
-                autoFocus 
+              <input
+                className={styles.inlineInput}
+                autoFocus
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
-                    handleAddQuick(e.currentTarget.value, 'com');
+                    handleAddQuickComod(e.currentTarget.value);
                     setIsAddingComod(false);
                   }
                 }}
@@ -204,24 +292,25 @@ const NewRoomPage: React.FC = () => {
               />
             ) : (
               <button type="button" className={styles.addChipBtn} onClick={() => setIsAddingComod(true)}>
-                + Comodidade
+                + Adicionar
               </button>
             )}
           </div>
         </div>
 
         <div className={styles.formFooter}>
-          <button type="submit" className={styles.saveBtn}>Finalizar Cadastro</button>
+          <button type="submit" className={styles.saveBtn}>Cadastrar Quarto</button>
         </div>
       </form>
 
+      {/* MODAL DE EDIÇÃO DE NOME */}
       {editingItem && (
         <div className={styles.overlay} onClick={() => setEditingItem(null)}>
           <div className={styles.miniDialog} onClick={e => e.stopPropagation()}>
-            <p>Alterar nome de {editingItem.tipo === 'cat' ? 'Categoria' : 'Comodidade'}</p>
-            <input 
-              ref={editInputRef} 
-              autoFocus 
+            <p>Editar Nome</p>
+            <input
+              ref={editInputRef}
+              autoFocus
               defaultValue={editingItem.item.nome}
               onKeyDown={(e) => e.key === 'Enter' && handleUpdate()}
             />
@@ -232,13 +321,14 @@ const NewRoomPage: React.FC = () => {
           </div>
         </div>
       )}
-      
+
+      {/* MODAL DE NOVA CATEGORIA (CAMPOS COMPLETOS) */}
       {isAddingCat && (
-        <CategoryModal 
-            onClose={() => setIsAddingCat(false)} 
-            onSave={handleSaveCategory} 
+        <CategoryModal
+          onClose={() => setIsAddingCat(false)}
+          onSave={handleSaveCategory}
         />
-        )}
+      )}
     </div>
   );
 };

@@ -54,6 +54,9 @@ public class Reserva {
     @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ReservaServico> servicos = new HashSet<>();
 
+    @OneToOne(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Hospedagem hospedagem;
+
     @PrePersist
     void prePersist() {
         if (dataReserva == null) dataReserva = Instant.now();

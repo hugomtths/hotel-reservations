@@ -3,6 +3,7 @@ package com.bd.hotel.reservations.application.service;
 import com.bd.hotel.reservations.persistence.entity.Cliente;
 import com.bd.hotel.reservations.persistence.entity.Quarto;
 import com.bd.hotel.reservations.persistence.entity.Reserva;
+import com.bd.hotel.reservations.persistence.enums.StatusReserva;
 import com.bd.hotel.reservations.persistence.repository.*;
 import com.bd.hotel.reservations.web.dto.request.ReservaRequest;
 import com.bd.hotel.reservations.web.dto.response.ReservaResponse;
@@ -79,6 +80,7 @@ public class ReservaService {
                     cliente.getUser().getEmail(),
                     cliente.getCpf(),
                     cliente.getTelefone(),
+                    (quarto != null) ? quarto.getId() : null,
                     (quarto != null) ? quarto.getNumero() : "N/A",
                     (categoria != null) ? categoria.getNome() : "N/A",
                     (categoria != null) ? categoria.getCapacidade() : 0,
@@ -143,10 +145,31 @@ public class ReservaService {
 
     @Transactional
     public void deletar(Long id) {
-        if (!reservaRepo.existsById(id)) {
-            throw new RuntimeException("Reserva não encontrada");
+        Reserva reserva = reservaRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Reserva não encontrada"));
+
+        // remove relação com quartos
+        reserva.getQuartos().clear();
+
+        // remove hospedagem se existir
+        if (reserva.getHospedagem() != null) {
+            reserva.setHospedagem(null);
         }
-        reservaRepo.deleteById(id);
+
+        reservaRepo.delete(reserva);
+    }
+
+    @Transactional
+    public void cancelar(Long id) {
+        Reserva reserva = reservaRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Reserva não encontrada"));
+        
+        if (reserva.getStatusReserva() == StatusReserva.CANCELADA) {
+             throw new RuntimeException("Reserva já está cancelada");
+        }
+        
+        reserva.setStatusReserva(StatusReserva.CANCELADA);
+        reservaRepo.save(reserva);
     }
 
     private void validarDatas(LocalDate checkin, LocalDate checkout) {

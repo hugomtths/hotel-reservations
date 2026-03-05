@@ -45,6 +45,7 @@ public class ReservaDetalhadaMapper {
                 clientEmail,
                 formatCpf(row.clienteCpf()),
                 formatPhone(row.clienteTelefone()),
+                extrairRoomId(quartos),
                 extrairRoomNumber(quartos),
                 extrairRoomCategory(quartos),
                 extrairRoomCapacity(quartos),
@@ -91,6 +92,12 @@ public class ReservaDetalhadaMapper {
         if (quartos == null || !quartos.isArray() || quartos.isEmpty()) return null;
         JsonNode n = quartos.get(0).get("numero");
         return (n == null || n.isNull()) ? null : n.asText();
+    }
+
+    private Long extrairRoomId(JsonNode quartos) {
+        if (quartos == null || !quartos.isArray() || quartos.isEmpty()) return null;
+        JsonNode n = quartos.get(0).get("quarto_id");
+        return (n == null || n.isNull()) ? null : n.asLong();
     }
 
     private String extrairRoomCategory(JsonNode quartos) {

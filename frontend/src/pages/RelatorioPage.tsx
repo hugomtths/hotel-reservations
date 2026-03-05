@@ -5,7 +5,11 @@ import {
   CalendarCheck, 
   DollarSign, 
   CreditCard, 
-  Percent 
+  Percent,
+  Ban,
+  Clock,
+  TrendingDown,
+  Users
 } from 'lucide-react';
 import styles from './RelatorioPage.module.css';
 
@@ -121,6 +125,66 @@ const RelatorioPage: React.FC = () => {
               ></div>
             </div>
             <span className={styles.metricLabel}>dos quartos ocupados</span>
+          </div>
+        </div>
+
+        {/* Card 6: Taxa de Cancelamento no Mês */}
+        <div className={styles.card}>
+          <div className={styles.cardHeader}>
+            <span className={styles.cardTitle}>Taxa de Cancelamento</span>
+            <div className={`${styles.iconWrapper} ${styles.red}`}>
+              <Ban size={24} />
+            </div>
+          </div>
+          <div className={styles.cardContent}>
+            <span className={styles.metricValue}>{dados.taxaCancelamentoMesPct}%</span>
+            <span className={styles.metricLabel}>das reservas deste mês</span>
+          </div>
+        </div>
+
+        {/* Card 7: Média de Permanência */}
+        <div className={styles.card}>
+          <div className={styles.cardHeader}>
+            <span className={styles.cardTitle}>Média de Permanência</span>
+            <div className={`${styles.iconWrapper} ${styles.blue}`}>
+              <Clock size={24} />
+            </div>
+          </div>
+          <div className={styles.cardContent}>
+            <span className={styles.metricValue}>{dados.mediaPermanenciaMesDias}</span>
+            <span className={styles.metricLabel}>dias por reserva no mês</span>
+          </div>
+        </div>
+
+        {/* Card 8: Valor Perdido (Cancelamentos) */}
+        <div className={styles.card}>
+          <div className={styles.cardHeader}>
+            <span className={styles.cardTitle}>Perda com Cancelamentos</span>
+            <div className={`${styles.iconWrapper} ${styles.orange}`}>
+              <TrendingDown size={24} />
+            </div>
+          </div>
+          <div className={styles.cardContent}>
+            <span className={styles.metricValue}>
+              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dados.valorPerdidoCancelamentosMes)}
+            </span>
+            <span className={styles.metricLabel}>deixou de entrar no mês</span>
+          </div>
+        </div>
+
+        {/* Card 9: Ticket Médio por Cliente */}
+        <div className={styles.card}>
+          <div className={styles.cardHeader}>
+            <span className={styles.cardTitle}>Ticket Médio</span>
+            <div className={`${styles.iconWrapper} ${styles.green}`}>
+              <Users size={24} />
+            </div>
+          </div>
+          <div className={styles.cardContent}>
+            <span className={styles.metricValue}>
+              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dados.ticketMedioClienteMes)}
+            </span>
+            <span className={styles.metricLabel}>gasto médio por cliente</span>
           </div>
         </div>
       </div>

@@ -14,7 +14,11 @@ public class RelatorioMapper {
                 row.reservasAtivasHoje(),
                 row.receitaEstimadaTotal(),
                 row.receitaMesAtual(),
-                row.taxaOcupacaoHoje()
+                row.taxaOcupacaoHoje(),
+                row.taxaCancelamentoMesPct(),
+                row.mediaPermanenciaMesDias(),
+                row.valorPerdidoCancelamentosMes(),
+                row.ticketMedioClienteMes()
         );
     }
 }

@@ -15,7 +15,7 @@ import {
 import styles from './RelatorioPage.module.css';
 
 import { relatorioService, type RelatorioData } from '../services/relatorioService';
-import { getDetailedReservations, cancelReservationService } from '../services/reservationService';
+import { getDetailedReservations, cancelReservationService, deleteReservationService } from '../services/reservationService';
 import ReservationCard, { type ReservationCardProps } from '../components/reservations/ReservationCard';
 
 const RelatorioPage: React.FC = () => {
@@ -59,7 +59,6 @@ const RelatorioPage: React.FC = () => {
           setReservations(prev => prev.map(res => 
             res.id === id ? { ...res, status: 'Cancelada' as const } : res
           ));
-          // Opcional: recarregar métricas após cancelamento
           const novoRelatorio = await relatorioService.obterRelatorioGeral();
           setDados(novoRelatorio);
         } else {
@@ -68,6 +67,24 @@ const RelatorioPage: React.FC = () => {
       } catch (error) {
         console.error('Erro ao cancelar reserva:', error);
         alert('Erro ao processar o cancelamento.');
+      }
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (confirm(`Tem certeza que deseja apagar a reserva ${id}? Esta ação não pode ser desfeita.`)) {
+      try {
+        const success = await deleteReservationService(id);
+        if (success) {
+          setReservations(prev => prev.filter(res => res.id !== id));
+          const novoRelatorio = await relatorioService.obterRelatorioGeral();
+          setDados(novoRelatorio);
+        } else {
+          alert('Não foi possível apagar a reserva. Tente novamente.');
+        }
+      } catch (error) {
+        console.error('Erro ao apagar reserva:', error);
+        alert('Erro ao processar a exclusão.');
       }
     }
   };
@@ -235,6 +252,7 @@ const RelatorioPage: React.FC = () => {
                 {...res}
                 onCancel={handleCancel}
                 onEdit={handleEdit}
+                onDelete={handleDelete}
               />
             ))}
           </div>

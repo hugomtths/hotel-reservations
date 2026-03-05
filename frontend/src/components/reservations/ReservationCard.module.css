@@ -138,6 +138,27 @@
   transform: scale(0.98);
 }
 
+.cancelStatusButton {
+  background-color: transparent;
+  border: 2px solid #f59e0b;
+  color: #f59e0b;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.cancelStatusButton:hover {
+  background-color: #fffbeb;
+}
+
+.cancelStatusButton:active {
+  transform: scale(0.98);
+}
+
 .editButton {
   background-color: transparent;
   border: 2px solid #3b82f6;

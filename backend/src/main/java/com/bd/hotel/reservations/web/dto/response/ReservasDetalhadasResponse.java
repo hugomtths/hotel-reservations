@@ -9,6 +9,7 @@ public record ReservasDetalhadasResponse(
         String clientEmail,
         String clientCpf,
         String clientPhone,
+        Long roomId,
         String roomNumber,
         String roomCategory,
         Integer roomCapacity,

@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/reservas")
@@ -37,14 +39,31 @@ public class ReservaController {
 
     // UPDATE
     @PutMapping("/{id}")
-    public ResponseEntity<Reserva> atualizar(@PathVariable Long id, @Valid @RequestBody ReservaRequest dto) {
-        return ResponseEntity.ok(reservaService.atualizar(id, dto));
+    public ResponseEntity<ReservaResponse> atualizar(@PathVariable Long id, @Valid @RequestBody ReservaRequest dto) {
+        Reserva reserva = reservaService.atualizar(id, dto);
+
+        ReservaResponse response = new ReservaResponse(
+                reserva.getId(),
+                reserva.getCliente().getId(),
+                reserva.getDataCheckinPrevisto(),
+                reserva.getDataCheckoutPrevisto(),
+                reserva.getQuartos().stream().map(q -> q.getId()).collect(Collectors.toSet()),
+                Set.of()
+        );
+
+        return ResponseEntity.ok(response);
     }
 
     // DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         reservaService.deletar(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/cancelar")
+    public ResponseEntity<Void> cancelar(@PathVariable Long id) {
+        reservaService.cancelar(id);
         return ResponseEntity.noContent().build();
     }
 }

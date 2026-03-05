@@ -6,6 +6,10 @@ export interface RelatorioData {
   receitaEstimadaTotal: number;
   receitaMesAtual: number;
   taxaOcupacaoHoje: number;
+  taxaCancelamentoMesPct: number;
+  mediaPermanenciaMesDias: number;
+  valorPerdidoCancelamentosMes: number;
+  ticketMedioClienteMes: number;
 }
 
 export const relatorioService = {

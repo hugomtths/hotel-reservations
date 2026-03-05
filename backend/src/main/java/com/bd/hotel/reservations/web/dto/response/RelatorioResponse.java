@@ -7,5 +7,9 @@ public record RelatorioResponse(
         Long reservasAtivasHoje,
         BigDecimal receitaEstimadaTotal,
         BigDecimal receitaMesAtual,
-        BigDecimal taxaOcupacaoHoje
+        BigDecimal taxaOcupacaoHoje,
+        BigDecimal taxaCancelamentoMesPct,
+        BigDecimal mediaPermanenciaMesDias,
+        BigDecimal valorPerdidoCancelamentosMes,
+        BigDecimal ticketMedioClienteMes
 ) {}

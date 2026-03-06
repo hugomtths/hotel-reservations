@@ -1,18 +1,40 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styles from './ReservationConfirm.module.css';
-import { ChevronLeft, CheckCircle, Loader2 } from 'lucide-react';
+import { ChevronLeft, CheckCircle, Loader2, ChevronDown, ChevronUp } from 'lucide-react';
 import toast from 'react-hot-toast';
+
+// Import de tipo caso seu ambiente exija prefixo 'type'
+import type { AdditionalServiceData } from './AdditionalModal';
 
 const ReservationConfirm = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Resgatando o estado enviado pela RoomPage (via navigate)
+  // --- Estados dos Serviços ---
+  const [isServiceOpen, setIsServiceOpen] = useState(false);
+  const [servicosDisponiveis] = useState<AdditionalServiceData[]>([
+    { id: 1, nomeServico: 'Frigobar', preco: 50.0, descricao: '' },
+    { id: 2, nomeServico: 'Café no Quarto', preco: 35.0, descricao: '' },
+    { id: 3, nomeServico: 'Estacionamento VIP', preco: 40.0, descricao: '' }
+  ]);
+  const [selectedServices, setSelectedServices] = useState<number[]>([]);
+
   const { room, checkIn, checkOut } = location.state || {};
 
-  // Proteção de rota: se não houver dados, volta para a home
+  // Fechar dropdown ao clicar fora
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsServiceOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   if (!room || !checkIn || !checkOut) {
     return (
       <div className={styles.container}>
@@ -26,30 +48,31 @@ const ReservationConfirm = () => {
     );
   }
 
-  // Cálculo de noites e parsing do preço
   const dateIn = new Date(checkIn);
   const dateOut = new Date(checkOut);
   const diffTime = Math.abs(dateOut.getTime() - dateIn.getTime());
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-  // Limpa a string "R$ 450,00" para o número 450.00
   const valorDiaria = room?.categoria?.precoDiaria || 0;
   const subtotal = valorDiaria * diffDays;
   const taxaLimpeza = 120.00;
-  const totalGeral = subtotal + taxaLimpeza;
+
+  // Cálculo dos serviços selecionados
+  const totalServicos = servicosDisponiveis
+    .filter(s => selectedServices.includes(s.id!))
+    .reduce((acc, curr) => acc + curr.preco, 0);
+
+  const totalGeral = subtotal + taxaLimpeza + totalServicos;
 
   const handleConfirmReservation = async () => {
     setIsSubmitting(true);
-
     const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const clienteId = user.id || 1; 
 
     const reservationData = {
-      clienteId: clienteId,
       dataCheckinPrevisto: checkIn,
       dataCheckoutPrevisto: checkOut,
-      quartoIds: [room.id]
+      quartoIds: [room.id],
+      servicosAdicionaisIds: selectedServices // Enviando os serviços escolhidos
     };
 
     if (!token) {
@@ -70,17 +93,13 @@ const ReservationConfirm = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Erro ao confirmar reserva no servidor');
+        throw new Error(errorData.message || 'Erro ao confirmar reserva');
       }
 
-      toast.success('Reserva confirmada com sucesso! Aproveite sua estadia.');
+      toast.success('Reserva confirmada com sucesso!');
       navigate('/home'); 
-      
     } catch (err: unknown) {
-      let errorMessage = "Falha na comunicação com o servidor";
-      if (err instanceof Error) errorMessage = err.message;
-      
-      console.error('Erro na reserva:', err);
+      const errorMessage = err instanceof Error ? err.message : "Falha na comunicação";
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -98,7 +117,6 @@ const ReservationConfirm = () => {
       </header>
 
       <div className={styles.contentGrid}>
-        {/* COLUNA ESQUERDA - DETALHES DA ESTADIA */}
         <section className={styles.detailsColumn}>
           <div className={styles.section}>
             <h2 className={styles.sectionTitle}>Sua viagem</h2>
@@ -113,10 +131,48 @@ const ReservationConfirm = () => {
                 <p className={styles.label}>Tempo de estadia</p>
                 <p className={styles.value}>{diffDays} {diffDays === 1 ? 'noite' : 'noites'}</p>
               </div>
-              <div className={styles.infoBlock}>
-                <p className={styles.label}>Check-in</p>
-                <p className={styles.value}>A partir das 14:00</p>
+            </div>
+          </div>
+
+          {/* SELEÇÃO DE SERVIÇOS ADICIONAIS */}
+          <div className={styles.section}>
+            <h2 className={styles.sectionTitle}>Serviços Adicionais</h2>
+            <p className={styles.sectionSubtitle}>Personalize sua estadia com itens extras:</p>
+            
+            <div className={styles.customSelectContainer} ref={dropdownRef}>
+              <div 
+                className={`${styles.customSelectTrigger} ${isServiceOpen ? styles.open : ''}`}
+                onClick={() => setIsServiceOpen(!isServiceOpen)}
+              >
+                <span>
+                  {selectedServices.length > 0 
+                    ? `${selectedServices.length} selecionado(s)` 
+                    : "Deseja adicionar algo?"}
+                </span>
+                {isServiceOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
               </div>
+
+              {isServiceOpen && (
+                <div className={styles.customOptionsList}>
+                  {servicosDisponiveis.map(serv => (
+                    <label key={serv.id} className={styles.optionItemSimple}>
+                      <input 
+                        type="checkbox" 
+                        checked={selectedServices.includes(serv.id!)}
+                        onChange={() => {
+                          setSelectedServices(prev => 
+                            prev.includes(serv.id!) ? prev.filter(id => id !== serv.id) : [...prev, serv.id!]
+                          );
+                        }}
+                      />
+                      <div className={styles.optionText}>
+                        <span className={styles.serviceName}>{serv.nomeServico}</span>
+                        <span className={styles.servicePrice}>+ R$ {serv.preco.toFixed(2)}</span>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
           
@@ -125,22 +181,19 @@ const ReservationConfirm = () => {
              <ul className={styles.policyList}>
                <li>Cancelamento gratuito por 24 horas após a confirmação.</li>
                <li>Não é permitido fumar dentro das acomodações.</li>
-               <li>Apresente um documento oficial com foto no check-in.</li>
              </ul>
           </div>
         </section>
 
-        {/* COLUNA DIREITA - RESUMO FINANCEIRO */}
         <aside className={styles.priceCard}>
           <div className={styles.roomPreview}>
             <img 
               src={room.image || "https://images.unsplash.com/photo-1590490360182-c33d57733427"} 
-              alt="Quarto selecionado" 
+              alt="Quarto" 
             />
             <div className={styles.roomMeta}>
               <span className={styles.categoryBadge}>{room.type}</span>
               <h3>{room.description}</h3>
-              <p className={styles.roomId}>Identificação: #{room.id}</p>
             </div>
           </div>
 
@@ -156,6 +209,14 @@ const ReservationConfirm = () => {
               <span>Taxa de limpeza fixa</span>
               <span>R$ {taxaLimpeza.toFixed(2).replace('.', ',')}</span>
             </div>
+
+            {/* Linha dinâmica de serviços no resumo */}
+            {totalServicos > 0 && (
+              <div className={styles.priceRow}>
+                <span>Serviços adicionais</span>
+                <span>R$ {totalServicos.toFixed(2).replace('.', ',')}</span>
+              </div>
+            )}
             
             <div className={`${styles.priceRow} ${styles.totalRow}`}>
               <strong>Total (BRL)</strong>
@@ -168,14 +229,9 @@ const ReservationConfirm = () => {
             onClick={handleConfirmReservation}
             disabled={isSubmitting}
           >
-            {isSubmitting ? (
-              <Loader2 size={20} className={styles.spinner} />
-            ) : (
-              <CheckCircle size={20} />
-            )}
-            {isSubmitting ? 'Processando reserva...' : 'Confirmar e Reservar'}
+            {isSubmitting ? <Loader2 size={20} className={styles.spinner} /> : <CheckCircle size={20} />}
+            {isSubmitting ? 'Processando...' : 'Confirmar e Reservar'}
           </button>
-          
           <p className={styles.secureNote}>Pagamento processado no check-in</p>
         </aside>
       </div>

@@ -1,10 +1,9 @@
 package com.bd.hotel.reservations.web.controller;
 
 import com.bd.hotel.reservations.application.service.ReservaService;
-import com.bd.hotel.reservations.persistence.entity.Reserva;
 import com.bd.hotel.reservations.web.dto.request.ReservaRequest;
-import com.bd.hotel.reservations.web.dto.response.ReservasDetalhadasResponse;
 import com.bd.hotel.reservations.web.dto.response.ReservaResponse;
+import com.bd.hotel.reservations.web.dto.response.ReservasDetalhadasResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,28 +19,49 @@ public class ReservaController {
 
     private final ReservaService reservaService;
 
-    // Endpoint original do seu colega
     @GetMapping("/detalhadas")
-    public List<ReservasDetalhadasResponse> listar() {
-        return reservaService.listarReservasDetalhadas();
+    public ResponseEntity<List<ReservasDetalhadasResponse>> listar(
+            @RequestParam(required = false) String email
+    ) {
+        List<ReservasDetalhadasResponse> response =
+                (email != null && !email.isBlank())
+                        ? reservaService.buscarPorEmail(email)
+                        : reservaService.listarReservasDetalhadas();
+
+        return ResponseEntity.ok(response);
     }
 
-    // CREATE
     @PostMapping
-    public ResponseEntity<ReservaResponse> criar(@Valid @RequestBody ReservaRequest dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(reservaService.salvar(dto));
+    public ResponseEntity<ReservaResponse> criar(
+            @Valid @RequestBody ReservaRequest request
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(reservaService.salvar(request));
     }
 
-    // UPDATE
     @PutMapping("/{id}")
-    public ResponseEntity<Reserva> atualizar(@PathVariable Long id, @Valid @RequestBody ReservaRequest dto) {
-        return ResponseEntity.ok(reservaService.atualizar(id, dto));
+    public ResponseEntity<ReservaResponse> atualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody ReservaRequest request
+    ) {
+        return ResponseEntity.ok(reservaService.atualizar(id, request));
     }
 
-    // DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         reservaService.deletar(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/cancelar")
+    public ResponseEntity<Void> cancelar(@PathVariable Long id) {
+        reservaService.cancelar(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/concluir")
+    public ResponseEntity<Void> concluir(@PathVariable Long id) {
+        reservaService.concluir(id);
         return ResponseEntity.noContent().build();
     }
 }

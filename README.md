@@ -79,6 +79,21 @@ Atualmente, o projeto encontra-se na fase de **implementação e validação do 
 - Organização do repositório, fluxo de contribuição e padrões de versionamento;
 - Utilização de quadro Scrum para organização e acompanhamento das atividades da equipe.
 
+
+### Correções e Melhorias da Entrega Anterior
+
+Com base nos feedbacks recebidos na última avaliação, todas as pendências apontadas foram resolvidas e integradas com sucesso nesta versão final:
+
+* **Implementação Completa dos CRUDs (Backend e Frontend):** *Feedback anterior:* Apenas a entidade "Reserva" possuía o CRUD completo e "Quarto" possuía apenas rotas de leitura.
+  * *Correção:* Foram desenvolvidos e integrados todos os endpoints e telas faltantes. Agora, **todas as entidades principais** (Quartos, Categorias, Comodidades, Serviços Adicionais, Clientes e Funcionários) possuem fluxos completos de Criação, Leitura, Atualização e Exclusão (CRUD) operantes em ambas as camadas da aplicação.
+
+* **Gestão de Reservas pelo Administrador (Frontend):** * *Feedback anterior:* O usuário administrador conseguia criar e visualizar reservas, mas a interface não permitia atualizar ou deletar.
+  * *Correção:* A limitação no frontend foi removida. O fluxo de gestão para o perfil `Funcionário / Gerente` está totalmente funcional, permitindo a edição e exclusão de qualquer reserva diretamente pela interface web.
+
+* **Visualização e Gestão de Reservas pelo Cliente (Frontend/Backend):**
+  * *Feedback anterior:* Erro de servidor (Status 500 - `NoResourceFoundException`) ao acessar a rota `/reservations`, além da falta das opções de editar e deletar para o cliente.
+  * *Correção:* O erro de roteamento e comunicação com a API foi completamente solucionado. O cliente agora consegue acessar a listagem de suas próprias reservas sem falhas. Além disso, foram implementadas no frontend as ações para que o cliente possa **atualizar** e **cancelar** suas reservas ativas de forma autônoma.
+
 ---
 
 ## Tecnologias Utilizadas
@@ -136,6 +151,9 @@ APP_VERSION=dev
 # Configurações para JWT
 JWT_SECRET=rjfoBSJbdo2DWCXzgWw42ug9VndCxurWHfAh71kq36o=
 JWT_EXPIRATION_MS=86400000
+
+# Configuração de Timezone
+APP_TIMEZONE=America/Recife
 ```
 
 Crie o seu `.env` copiando o exemplo:
@@ -261,8 +279,12 @@ A base de dados inicial do sistema foi populada com o auxílio de Inteligência 
 O sistema já possui usuários cadastrados para testes:
 
 #### Gerente
-- **Email:** funcionario@local.dev
-- **Senha:** password  
+- **Email:** gerente@local.dev
+- **Senha:** password1
+
+#### Funcionário (Atendente)
+- **Email:** atendente@local.dev
+- **Senha:** password2
 
 #### Cliente
 - **Email:** user1@local.dev  
@@ -270,28 +292,38 @@ O sistema já possui usuários cadastrados para testes:
 
 ---
 
-### Funcionalidades Disponíveis
+## Funcionalidades Disponíveis
 
-#### Integração de Cadastro
-Permite o cadastro de novos usuários no sistema.
+O sistema contempla um fluxo completo de ponta a ponta para a gestão hoteleira, dividido nos seguintes módulos:
 
-#### Integração de Login
-Autenticação via email e senha, com geração de token JWT.
+**Autenticação e Gestão de Usuários**
+* **Autenticação:** Login via email e senha com segurança baseada em token JWT.
+* **Clientes:** Criação de conta (cadastro), visualização de perfil e edição de dados.
+* **Funcionários:** Visualização de listagem e edição de dados cadastrais.
 
-#### Integração de Reservas Detalhadas
-Consulta detalhada das reservas realizadas, incluindo dados de quartos e período, no perfil de gerente.
+**Gestão de Estrutura e Serviços**
+* **Quartos:** Gerenciamento completo (criar, buscar, visualizar por ID, editar e deletar).
+* **Categorias:** Gerenciamento completo (adicionar, editar, deletar e buscar).
+* **Comodidades:** Gerenciamento completo (adicionar, editar, deletar e buscar).
+* **Serviços Adicionais:** Gerenciamento completo (adicionar, editar, deletar e visualizar).
 
-#### Integração de Quartos Disponíveis
-Listagem de quartos disponíveis para um intervalo de datas informado, na homepage
+**Gestão de Reservas**
+* **Portal do Cliente:** Busca de quartos disponíveis por período, criação de novas reservas, visualização do histórico pessoal e edição (cancelamento de reservas ativas).
+* **Portal do Atendente:** Visualização de todas as reservas do hotel e atualização de status (registro de check-in e check-out).
+* **Portal do Gerente:** Acesso total à visualização, detalhamento e edição de qualquer reserva do sistema.
 
-#### Integração de Quarto por ID
-Consulta individual de um quarto específico
+**Hospedagem e Financeiro**
+* **Hospedagem (Balcão):** Registro de estadia realizado pelo funcionário, com suporte tanto para clientes com reserva prévia quanto para novos clientes (sem reserva).
+* **Pagamentos:** Geração e registro de pagamento automático vinculado à hospedagem ou reserva.
 
-#### Integração de Cadastro de Reserva
-Criação de nova reserva informando cliente, período e quarto desejado.
+**Relatório Administrativo**
 
-#### Integração de relatório
-Consulta dados administrativos do sistema
+O sistema conta com um módulo dedicado à emissão de relatórios gerenciais, focado em entregar métricas e dados administrativos de forma clara para os usuários com perfil de `Gerente`.
+
+* **O que ele faz:** Consolida informações cruciais das operações do hotel, cruzando dados de clientes, ocupação de quartos, status de reservas e movimentações financeiras em uma única interface.
+* **Como funciona:** O relatório é alimentado diretamente por uma **View dedicada**. Em vez de o backend fazer dezenas de consultas separadas e processar os dados na memória (o que geraria lentidão), a *View* já executa todas as junções (`JOINs`) e agregações matemáticas necessárias nativamente no banco de dados. A API apenas consome esse resultado otimizado, garantindo alta performance na geração das estatísticas.
+
+---
 
 ### Observação sobre o uso de Views
 
@@ -301,6 +333,36 @@ A principal vantagem é que, em vez de a aplicação precisar buscar vários IDs
 
 Exemplo da view de reservas, que junta as tabelas de cliente e quarto para informar dados dessas tabelas sem consultas adicionais.
 
+---
+
+### Implementação de Trigger
+
+O projeto utiliza gatilhos diretamente no Banco de Dados para garantir que regras críticas de negócio sejam respeitadas, independente da camada de aplicação.
+
+### 1. Bloqueio de Exclusão de Quarto com Reservas Ativas
+
+* **Regra de Negócio:** Impede a remoção de um quarto caso ele esteja vinculado a qualquer reserva com o status `CONFIRMADA`. Isso evita que quartos com compromissos futuros sejam deletados por erro humano, mantendo a consistência da agenda.
+* **Funcionamento:** O gatilho `trg_bloqueio_exclusao_quarto` é disparado antes de deletar um registro na tabela `quarto`.
+    - Ele aciona uma função que verifica diretamente na tabela `reserva` se existe algum registro ativo (`status_reserva = 'CONFIRMADA'`) associado ao ID do quarto que está sendo excluído.
+    - Se houver vínculo, o banco aborta a operação e envia uma mensagem personalizada de bloqueio.
+
+### Como testar o Trigger
+
+#### **A. Teste via Banco de Dados (SQL)**
+
+Tente executar a exclusão diretamente via terminal:
+
+```sql
+-- Tente deletar um quarto que possua reserva confirmada
+DELETE FROM quarto WHERE id = 1;
+-- Resultado esperado:
+-- ERROR: Não é possível excluir o quarto [NÚMERO]. Ele possui reservas ativas (CONFIRMADA).
+```
+#### **B. Teste via Frontend / Interface**
+1. Acesse o painel de **Gerenciamento de Quartos**.
+2. Tente excluir um quarto que já possua uma reserva confirmada.
+3. **Resultado esperado:** O sistema bloqueará a exclusão e exibirá um alerta (Toast) com a mensagem:
+   > *"Não é possível excluir este quarto, pois ele possui reservas ativas (CONFIRMADA) vinculadas a ele."*
 ---
 
 ## Guia de Contribuição

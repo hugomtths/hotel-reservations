@@ -3,23 +3,31 @@ package com.bd.hotel.reservations.persistence.entity;
 import com.bd.hotel.reservations.persistence.enums.MetodoPagamento;
 import com.bd.hotel.reservations.persistence.enums.StatusPagamento;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
 @Table(name = "pagamento")
-class Pagamento {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Pagamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reserva_id", unique = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reserva_id")
     private Reserva reserva;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hospedagem_id", unique = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hospedagem_id")
     private Hospedagem hospedagem;
 
     @Column(name = "valor_total", nullable = false, precision = 10, scale = 2)
@@ -34,7 +42,7 @@ class Pagamento {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status_pagamento", nullable = false, length = 20)
-    private StatusPagamento statusPagamento = StatusPagamento.PENDENTE;
+    private StatusPagamento statusPagamento = StatusPagamento.CONCLUIDO;
 
     @PrePersist
     void prePersist() {

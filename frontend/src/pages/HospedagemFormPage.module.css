@@ -1,0 +1,265 @@
+.container {
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 0 1.5rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.header {
+  margin-bottom: 2.5rem;
+}
+
+.titleArea {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header h1 {
+  color: #1a202c;
+  font-size: 2rem;
+  margin: 0;
+}
+
+.subtitle {
+  color: #718096;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+
+.formCard {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+.section {
+  margin-bottom: 3rem;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  color: #2d3748;
+  border-bottom: 2px solid #f7fafc;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 2rem; 
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .row {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%; 
+}
+
+.inputGroup label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.inputWrapper {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.inputGroup input, 
+.inputGroup select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.2s;
+  background-color: #fff;
+  box-sizing: border-box; 
+}
+
+.inputGroup input:focus, 
+.inputGroup select:focus {
+  outline: none;
+  border-color: #3182ce;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+.inputGroup input:disabled {
+  background-color: #f7fafc;
+  color: #a0aec0;
+  cursor: not-allowed;
+}
+
+/* Botões de busca e novo cliente */
+.searchBtn, .addClientBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.searchBtn { background: #4a5568; color: white; border: none; }
+.addClientBtn { background: #ebf8ff; color: #3182ce; border: 1px solid #bee3f8; }
+
+/* Campo de preço */
+.priceInputWrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cbd5e0;
+  border-radius: 10px;
+  padding-left: 1rem;
+  background: #f0fff4;
+}
+
+.priceInputWrapper span { font-weight: bold; color: #38a169; }
+.priceInputWrapper input {
+  border: none !important;
+  background: transparent !important;
+  color: #2f855a;
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 2rem;
+  border-top: 2px solid #f7fafc;
+}
+
+.cancelBtn, .confirmBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cancelBtn { background: white; border: 1px solid #e2e8f0; color: #718096; }
+.confirmBtn { background: #3182ce; color: white; border: none; }
+
+.labelWithAction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.textActionBtn {
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.customSelectContainer {
+  position: relative;
+  width: 100%;
+}
+
+.customSelectTrigger {
+  padding: 0.75rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.customOptionsList {
+  position: absolute;
+  top: 105%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.customOptionItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.optionCheckboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.optionActions {
+  display: flex;
+  gap: 8px;
+}
+
+.editIcon, .deleteIcon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: 0.2s;
+}
+
+.editIcon { color: #64748b; }
+.editIcon:hover { background: #f1f5f9; color: #2563eb; }
+
+.deleteIcon { color: #94a3b8; }
+.deleteIcon:hover { background: #fee2e2; color: #ef4444; }
+
+.priceTotalHighlight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f0fdf4;
+  padding: 0.5rem 1rem;
+  border: 2px solid #22c55e;
+  border-radius: 8px;
+}
+
+.priceTotalHighlight input {
+  background: transparent;
+  border: none;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #166534;
+  width: 100%;
+}

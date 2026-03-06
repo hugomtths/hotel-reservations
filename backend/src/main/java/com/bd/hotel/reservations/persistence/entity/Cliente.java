@@ -38,4 +38,10 @@ public class Cliente {
     public void updateContact(String telefone) {
         this.telefone = telefone;
     }
+
+    public void updateProfile(String nome, String telefone, LocalDate dataNascimento) {
+        this.nome = nome;
+        this.telefone = telefone;
+        this.dataNascimento = dataNascimento;
+    }
 }

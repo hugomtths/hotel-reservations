@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import styles from './MinhasReservasPage.module.css';
 import ReservationCard, { type ReservationCardProps } from '../components/reservations/ReservationCard';
@@ -11,6 +12,7 @@ export default function MinhasReservasPage() {
   const [reservations, setReservations] = useState<ReservationCardProps[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [error, setError] = useState('');
+  const [filterStatus, setFilterStatus] = useState<'ALL' | 'ACTIVE' | 'COMPLETED' | 'CANCELLED'>('ALL');
   
   const userRole = getUserRole();
   const userEmail = getUserEmail();
@@ -76,22 +78,34 @@ export default function MinhasReservasPage() {
     }
   };
 
+  const navigate = useNavigate();
+
   const handleCancel = async (id: string) => {
-    if (confirm(`Tem certeza que deseja cancelar a reserva ${id}?`)) {
-      try {
-        const success = await cancelReservationService(id);
-        if (success) {
-          setReservations(prev => prev.map(res => 
-            res.id === id ? { ...res, status: 'Cancelada' as const } : res
-          ));
-        } else {
-          alert('Não foi possível cancelar a reserva. Tente novamente.');
-        }
-      } catch (error) {
-        console.error('Erro ao cancelar reserva:', error);
-        alert('Erro ao processar o cancelamento.');
+    try {
+      const success = await cancelReservationService(id);
+      if (success) {
+        setReservations(prev => prev.map(res => 
+          res.id === id ? { ...res, status: 'Cancelada' as const } : res
+        ));
+        return true;
       }
+    } catch (error) {
+      console.error('Erro ao cancelar reserva:', error);
+      throw error; 
     }
+    return false;
+  };
+
+  const filteredReservations = reservations.filter(res => {
+    if (filterStatus === 'ALL') return true;
+    if (filterStatus === 'ACTIVE') return ['Ativa', 'PENDENTE', 'CONFIRMADA'].includes(res.status);
+    if (filterStatus === 'COMPLETED') return ['Concluída', 'CONCLUIDA'].includes(res.status);
+    if (filterStatus === 'CANCELLED') return ['Cancelada', 'CANCELADA'].includes(res.status);
+    return true;
+  });
+
+  const handleCheckIn = (data: ReservationCardProps) => {
+    navigate('/hospedagem', { state: { reservation: data } });
   };
 
   return (
@@ -126,30 +140,51 @@ export default function MinhasReservasPage() {
           </form>
         )}
 
+        {/* Filtro de Status - Botões */}
+        <div className={styles.filterContainer}>
+          {[
+            { label: 'Todas', value: 'ALL' },
+            { label: 'Ativas', value: 'ACTIVE' },
+            { label: 'Concluídas', value: 'COMPLETED' },
+            { label: 'Canceladas', value: 'CANCELLED' }
+          ].map(option => (
+            <button
+              key={option.value}
+              onClick={() => setFilterStatus(option.value as any)}
+              className={`${styles.filterButton} ${filterStatus === option.value ? styles.filterButtonActive : ''}`}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+
         {error && (
           <p className={styles.errorMessage} style={{ color: '#ef4444' }}>
             {error}
           </p>
         )}
-        
-        {hasSearched && reservations.length === 0 && !error && (
-           <p className={styles.errorMessage}>
-             Nenhuma reserva encontrada.
-           </p>
-        )}
       </div>
 
       {/* Seção de Resultados */}
-      {reservations.length > 0 && (
+      {filteredReservations.length > 0 && (
         <div className={styles.resultsContainer}>
-          {reservations.map(res => (
+          {filteredReservations.map(res => (
             <ReservationCard 
               key={res.id}
               {...res}
               onCancel={handleCancel}
+              onCheckIn={isManager ? handleCheckIn : undefined}
             />
           ))}
         </div>
+      )}
+
+      {hasSearched && !loading && !error && (
+         reservations.length === 0 ? (
+            <p className={styles.errorMessage}>Nenhuma reserva encontrada.</p>
+         ) : filteredReservations.length === 0 ? (
+            <p className={styles.errorMessage}>Nenhuma reserva encontrada com o filtro selecionado.</p>
+         ) : null
       )}
     </div>
   );

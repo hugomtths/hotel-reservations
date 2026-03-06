@@ -29,4 +29,9 @@ public class ServicoAdicional {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal preco;
 
+    public void atualizar(String nomeServico, String descricao, BigDecimal preco) {
+        this.nomeServico = nomeServico;
+        this.descricao = descricao;
+        this.preco = preco;
+    }
 }

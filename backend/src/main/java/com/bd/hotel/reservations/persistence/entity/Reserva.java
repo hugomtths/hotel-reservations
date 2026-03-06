@@ -41,18 +41,17 @@ public class Reserva {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status_reserva", nullable = false, length = 20)
-    private StatusReserva statusReserva = StatusReserva.PENDENTE;
+    private StatusReserva statusReserva = StatusReserva.CONFIRMADA;
 
-    @ManyToMany
-    @JoinTable(
-            name = "reserva_quarto",
-            joinColumns = @JoinColumn(name = "reserva_id"),
-            inverseJoinColumns = @JoinColumn(name = "quarto_id")
-    )
-    private Set<Quarto> quartos = new HashSet<>();
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "quarto_id", nullable = false)
+    private Quarto quarto;
 
     @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ReservaServico> servicos = new HashSet<>();
+
+    @OneToOne(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Hospedagem hospedagem;
 
     @PrePersist
     void prePersist() {

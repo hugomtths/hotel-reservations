@@ -2,6 +2,7 @@ package com.bd.hotel.reservations.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,6 +12,7 @@ import java.util.Set;
         @UniqueConstraint(name = "uk_hospedagem_reserva", columnNames = "reserva_id")
 })
 @Getter
+@Setter
 public class Hospedagem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,16 +35,15 @@ public class Hospedagem {
     @Column(name = "data_checkout_real")
     private Instant dataCheckoutReal;
 
-    @ManyToMany
-    @JoinTable(
-            name = "hospedagem_quarto",
-            joinColumns = @JoinColumn(name = "hospedagem_id"),
-            inverseJoinColumns = @JoinColumn(name = "quarto_id")
-    )
-    private Set<Quarto> quartos = new HashSet<>();
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "quarto_id", nullable = false)
+    private Quarto quarto;
 
     @OneToMany(mappedBy = "hospedagem", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<HospedagemServico> servicos = new HashSet<>();
+
+    @OneToMany(mappedBy = "hospedagem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Pagamento> pagamentos = new HashSet<>();
 
     @PrePersist
     void prePersist() {

@@ -48,4 +48,13 @@ public class Quarto {
             inverseJoinColumns = @JoinColumn(name = "comodidade_id")
     )
     private Set<Comodidade> comodidades = new HashSet<>();
+
+    public void atualizar(Hotel hotel, Categoria categoria, String numero, StatusQuarto status, BigDecimal area, Set<Comodidade> comodidades) {
+        this.hotel = hotel;
+        this.categoria = categoria;
+        this.numero = numero;
+        this.status = status;
+        this.area = area;
+        this.comodidades = comodidades;
+    }
 }

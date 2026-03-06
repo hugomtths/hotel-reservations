@@ -112,7 +112,7 @@ CREATE TABLE quarto
     area         DECIMAL(10, 2),                   
     FOREIGN KEY (hotel_id) REFERENCES hotel (id),
     FOREIGN KEY (categoria_id) REFERENCES categoria (id),
-    CONSTRAINT chk_status_quarto CHECK (status IN ('DISPONIVEL','OCUPADO','MANUTENCAO','LIMPEZA')),
+    CONSTRAINT chk_status_quarto CHECK (status IN ('DISPONIVEL','MANUTENCAO','LIMPEZA')),
     CONSTRAINT chk_area_quarto CHECK (area > 0),
     CONSTRAINT unq_quarto_hotel_numero UNIQUE (hotel_id, numero)
 );
@@ -133,10 +133,10 @@ CREATE TABLE reserva
     data_reserva           TIMESTAMPTZ NOT NULL DEFAULT now(),
     data_checkin_previsto  DATE     NOT NULL,
     data_checkout_previsto DATE     NOT NULL,
-    status_reserva         VARCHAR(20) NOT NULL DEFAULT 'PENDENTE',
+    status_reserva         VARCHAR(20) NOT NULL DEFAULT 'CONFIRMADA',
     CONSTRAINT fk_reserva_cliente
         FOREIGN KEY (cliente_id) REFERENCES cliente (id),
-    CONSTRAINT chk_status_reserva CHECK (status_reserva IN ('PENDENTE','CONFIRMADA','CANCELADA','CONCLUIDA')),
+    CONSTRAINT chk_status_reserva CHECK (status_reserva IN ('CONFIRMADA','CANCELADA','CONCLUIDA')),
     CONSTRAINT chk_datas_reserva CHECK (data_checkin_previsto < data_checkout_previsto)
 );
 
@@ -202,7 +202,7 @@ CREATE TABLE pagamento
     valor_total      DECIMAL(10, 2) NOT NULL,
     data_pagamento   TIMESTAMPTZ NOT NULL DEFAULT now(),
     metodo_pagamento VARCHAR(50) NOT NULL,
-    status_pagamento VARCHAR(20) NOT NULL DEFAULT 'PENDENTE',
+    status_pagamento VARCHAR(20) NOT NULL,
 
     CONSTRAINT fk_pagamento_hospedagem
         FOREIGN KEY (hospedagem_id) REFERENCES hospedagem (id),
@@ -211,7 +211,7 @@ CREATE TABLE pagamento
         FOREIGN KEY (reserva_id) REFERENCES reserva (id),
 
     CONSTRAINT chk_status_pgto CHECK (
-        status_pagamento IN ('PENDENTE', 'CONCLUIDO', 'ESTORNADO')
+        status_pagamento IN ('CONCLUIDO')
         ),
 
     CONSTRAINT chk_metodo_pgto CHECK (

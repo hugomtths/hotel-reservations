@@ -19,4 +19,8 @@ public class Comodidade {
 
     @Column(nullable = false, length = 100)
     private String nome;
+
+    public void atualizarNome(String nome) {
+        this.nome = nome;
+    }
 }

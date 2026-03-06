@@ -1,4 +1,4 @@
-package com.bd.hotel.reservations.persistence.repository;
+package com.bd.hotel.reservations.web.dto.request;
 
 import java.math.BigDecimal;
 

@@ -9,8 +9,9 @@ import java.util.List;
 
 @Repository
 public interface QuartoRepository extends JpaRepository<Quarto, Long> {
-
     List<Quarto> findByStatus(StatusQuarto status);
 
     List<Quarto> findByNumero(String numero);
+
+    List<Quarto> findByHotelId(Long hotelId);
 }

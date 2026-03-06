@@ -4,12 +4,12 @@ import com.bd.hotel.reservations.exception.ApiException;
 import org.springframework.http.HttpStatus;
 
 public class CategoriaNotFoundException extends ApiException {
-    public CategoriaNotFoundException(Long id) {
+    public CategoriaNotFoundException(Long categoriaId) {
         super(
                 "CATEGORIA_NOT_FOUND",
                 HttpStatus.NOT_FOUND,
                 "Recurso não encontrado",
-                "Categoria não encontrada com o ID: " + id
+                "Categoria não encontrada com id: " + categoriaId
         );
     }
 }

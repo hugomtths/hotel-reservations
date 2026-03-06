@@ -1,6 +1,6 @@
 package com.bd.hotel.reservations.web.mapper;
 
-import com.bd.hotel.reservations.persistence.repository.QuartosDisponiveisViewRowDto;
+import com.bd.hotel.reservations.web.dto.request.QuartosDisponiveisViewRowDto;
 import com.bd.hotel.reservations.web.dto.response.QuartoDisponivelResponse;
 import org.springframework.stereotype.Component;
 

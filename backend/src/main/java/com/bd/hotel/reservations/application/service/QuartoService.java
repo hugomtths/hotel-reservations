@@ -99,40 +99,20 @@ public class QuartoService {
         return quartoMapper.toResponse(quarto);
     }
 
-    @Transactional
-    public QuartoResponse atualizar(Long id, QuartoRequest request) {
-        Quarto quarto = quartoRepository.findById(id)
-                .orElseThrow(() -> new QuartoNotFoundException(id));
+    @Transactional(readOnly = true)
+    public List<QuartoResponse> listarTodosPorHotel(Long hotelId) {
+        List<Quarto> quartos = quartoRepository.findByHotelId(hotelId);
+        
+        if (quartos.isEmpty()) return List.of();
 
-        Hotel hotel = hotelRepository.findById(request.getHotelId())
-                .orElseThrow(() -> new HotelNotFoundException(request.getHotelId()));
+        quartos.forEach(quarto -> {
+            Hibernate.initialize(quarto.getCategoria());
+            Hibernate.initialize(quarto.getHotel());
+            Hibernate.initialize(quarto.getComodidades());
+        });
 
-        Categoria categoria = categoriaRepository.findById(request.getCategoriaId())
-                .orElseThrow(() -> new CategoriaNotFoundException(request.getCategoriaId()));
-
-        Set<Comodidade> comodidades = new HashSet<>();
-        if (request.getComodidadeIds() != null && !request.getComodidadeIds().isEmpty()) {
-            comodidades.addAll(comodidadeRepository.findAllById(request.getComodidadeIds()));
-        }
-
-        quarto.atualizar(
-                hotel,
-                categoria,
-                request.getNumero(),
-                request.getStatus() != null ? request.getStatus() : quarto.getStatus(),
-                request.getArea(),
-                comodidades
-        );
-
-        Quarto salvo = quartoRepository.save(quarto);
-        return quartoMapper.toResponse(salvo);
-    }
-
-    @Transactional
-    public void deletar(Long id) {
-        if (!quartoRepository.existsById(id)) {
-            throw new QuartoNotFoundException(id);
-        }
-        quartoRepository.deleteById(id);
+        return quartos.stream()
+                .map(quartoMapper::toResponse)
+                .toList();
     }
 }

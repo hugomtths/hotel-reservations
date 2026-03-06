@@ -44,11 +44,9 @@ class UsersSeeder implements SeederInterface {
     public void seed() {
         Hotel hotel = resolveHotel();
 
-        // 1) FUNCIONARIOS (User(role=FUNCIONARIO) + Funcionario(cargo=GERENTE))
-        seedFuncionario(hotel, "funcionario@local.dev", "password", "Funcionario Local", "00000000000");
-        seedFuncionario(hotel, "funcionario2@local.dev", "password2", "Funcionario Local 2", "00000000001");
+        seedFuncionario(hotel, "gerente@local.dev", "password1", "Gerente Local", "00000000000", CargoFuncionario.GERENTE);
+        seedFuncionario(hotel, "atendente@local.dev", "password2", "Atendente Local", "00000000001", CargoFuncionario.ATENDENTE);
 
-        // 2) CLIENTES (User(role=CLIENTE) + Cliente)
         seedClientes(List.of(
                 new SeedCliente("user1@local.dev", "password1", "Cliente 1", "11111111111", "81999990001", LocalDate.of(1998, 1, 10)),
                 new SeedCliente("user2@local.dev", "password2", "Cliente 2", "22222222222", "81999990002", LocalDate.of(2000, 5, 21)),
@@ -67,7 +65,15 @@ class UsersSeeder implements SeederInterface {
                 .orElseThrow(() -> new IllegalStateException("Nenhum hotel cadastrado."));
     }
 
-    private void seedFuncionario(Hotel hotel, String email, String rawPassword, String nome, String cpf) {
+    private void seedFuncionario(
+            Hotel hotel,
+            String email,
+            String rawPassword,
+            String nome,
+            String cpf,
+            CargoFuncionario cargo
+    ) {
+
         String normalizedEmail = email.trim().toLowerCase();
 
         if (userRepository.existsByEmail(normalizedEmail)) {
@@ -84,7 +90,7 @@ class UsersSeeder implements SeederInterface {
                 user,
                 nome,
                 hotel,
-                CargoFuncionario.GERENTE,
+                cargo,
                 BigDecimal.ZERO,
                 cpf
         );

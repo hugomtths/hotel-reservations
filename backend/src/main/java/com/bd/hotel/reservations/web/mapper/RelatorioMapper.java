@@ -1,6 +1,6 @@
 package com.bd.hotel.reservations.web.mapper;
 
-import com.bd.hotel.reservations.persistence.repository.RelatorioRowDto;
+import com.bd.hotel.reservations.web.dto.request.RelatorioRowDto;
 import com.bd.hotel.reservations.web.dto.response.RelatorioResponse;
 import org.springframework.stereotype.Component;
 

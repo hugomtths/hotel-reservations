@@ -1,5 +1,6 @@
 package com.bd.hotel.reservations.persistence.repository;
 
+import com.bd.hotel.reservations.web.dto.request.QuartosDisponiveisViewRowDto;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 

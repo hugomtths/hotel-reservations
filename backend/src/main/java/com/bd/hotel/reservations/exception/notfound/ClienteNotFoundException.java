@@ -4,12 +4,21 @@ import com.bd.hotel.reservations.exception.ApiException;
 import org.springframework.http.HttpStatus;
 
 public class ClienteNotFoundException extends ApiException {
-    public ClienteNotFoundException(String message) {
+    public ClienteNotFoundException(Long userId) {
         super(
                 "CLIENTE_NOT_FOUND",
                 HttpStatus.NOT_FOUND,
-                "Cliente não encontrado",
-                message
+                "Recurso não encontrado",
+                "Cliente não encontrado com id: " + userId
+        );
+    }
+
+    public ClienteNotFoundException(String email) {
+        super(
+                "CLIENTE_NOT_FOUND",
+                HttpStatus.NOT_FOUND,
+                "Recurso não encontrado",
+                "Cliente não encontrado com email: " + email
         );
     }
 }

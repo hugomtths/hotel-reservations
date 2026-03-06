@@ -47,7 +47,6 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
 
-
     private HttpSecurity baseSecurityFilterChain(HttpSecurity http) {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -57,6 +56,7 @@ public class SecurityConfig {
     }
 
     @Bean
+    @Profile("dev")
     public SecurityFilterChain devSecurityFilterChain(HttpSecurity http) {
         return baseSecurityFilterChain(http)
                 .authorizeHttpRequests(auth -> auth

@@ -3,13 +3,13 @@ package com.bd.hotel.reservations.exception.notfound;
 import com.bd.hotel.reservations.exception.ApiException;
 import org.springframework.http.HttpStatus;
 
-public class UserNotFoundException extends ApiException {
-    public UserNotFoundException(Long userid) {
+public class CategoriaNotFoundException extends ApiException {
+    public CategoriaNotFoundException(Long categoriaId) {
         super(
-                "USER_NOT_FOUND",
+                "CATEGORIA_NOT_FOUND",
                 HttpStatus.NOT_FOUND,
                 "Recurso não encontrado",
-                "User não encontrado com id: " + userid
+                "Categoria não encontrada com id: " + categoriaId
         );
     }
 }

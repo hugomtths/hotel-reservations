@@ -1,6 +1,6 @@
 package com.bd.hotel.reservations.web.mapper;
 
-import com.bd.hotel.reservations.persistence.repository.ReservasDetalhadasViewRowDto;
+import com.bd.hotel.reservations.web.dto.request.ReservasDetalhadasViewRowDto;
 import com.bd.hotel.reservations.web.dto.response.ReservasDetalhadasResponse;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

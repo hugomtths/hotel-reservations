@@ -42,7 +42,7 @@ public class Pagamento {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status_pagamento", nullable = false, length = 20)
-    private StatusPagamento statusPagamento = StatusPagamento.PENDENTE;
+    private StatusPagamento statusPagamento = StatusPagamento.CONCLUIDO;
 
     @PrePersist
     void prePersist() {

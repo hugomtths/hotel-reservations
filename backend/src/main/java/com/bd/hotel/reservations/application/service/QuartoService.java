@@ -102,14 +102,10 @@ public class QuartoService {
         return quartoRepository.findById(id)
                 .orElseThrow(() -> new QuartoNotFoundException(id));
     }
-
-<<<<<<< Updated upstream
     public List<Quarto> findAllById(Set<Long> ids) {
         return quartoRepository.findAllById(ids);
     }
 
-=======
->>>>>>> Stashed changes
     @Transactional(readOnly = true)
     public List<QuartoResponse> listarTodosPorHotel(Long hotelId) {
         List<Quarto> quartos = quartoRepository.findByHotelId(hotelId);

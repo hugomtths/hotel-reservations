@@ -279,8 +279,12 @@ A base de dados inicial do sistema foi populada com o auxílio de Inteligência 
 O sistema já possui usuários cadastrados para testes:
 
 #### Gerente
-- **Email:** funcionario@local.dev
-- **Senha:** password  
+- **Email:** gerente@local.dev
+- **Senha:** password1
+
+#### Funcionário (Atendente)
+- **Email:** atendente@local.dev
+- **Senha:** password2
 
 #### Cliente
 - **Email:** user1@local.dev  

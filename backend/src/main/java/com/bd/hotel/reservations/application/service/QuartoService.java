@@ -102,6 +102,7 @@ public class QuartoService {
         return quartoRepository.findById(id)
                 .orElseThrow(() -> new QuartoNotFoundException(id));
     }
+
     public List<Quarto> findAllById(Set<Long> ids) {
         return quartoRepository.findAllById(ids);
     }

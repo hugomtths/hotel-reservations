@@ -21,4 +21,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
     @Query("SELECT c FROM Cliente c JOIN FETCH c.user u WHERE u.email = :email")
     Optional<Cliente> findByUserEmail(@Param("email") String email);
+
+    @EntityGraph(attributePaths = {"user"})
+    Optional<Cliente> findByCpf(String cpf);
 }

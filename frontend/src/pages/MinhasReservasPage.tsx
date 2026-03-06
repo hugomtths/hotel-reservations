@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import styles from './MinhasReservasPage.module.css';
 import ReservationCard, { type ReservationCardProps } from '../components/reservations/ReservationCard';
-import { getReservationsByEmail, cancelReservationService, getDetailedReservations, deleteReservationService } from '../services/reservationService';
+import { getReservationsByEmail, cancelReservationService, getDetailedReservations } from '../services/reservationService';
 import { getUserRole, getUserEmail } from '../services/authService';
 
 export default function MinhasReservasPage() {
@@ -80,45 +80,20 @@ export default function MinhasReservasPage() {
 
   const navigate = useNavigate();
 
-  const handleEdit = (id: string) => {
-    const reservation = reservations.find(r => r.id === id);
-    if (reservation) {
-      navigate(`/reserva/editar/${id}`, { state: reservation });
-    }
-  };
-
   const handleCancel = async (id: string) => {
-    if (confirm(`Tem certeza que deseja cancelar a reserva ${id}?`)) {
-      try {
-        const success = await cancelReservationService(id);
-        if (success) {
-          setReservations(prev => prev.map(res => 
-            res.id === id ? { ...res, status: 'Cancelada' as const } : res
-          ));
-        } else {
-          alert('Não foi possível cancelar a reserva. Tente novamente.');
-        }
-      } catch (error) {
-        console.error('Erro ao cancelar reserva:', error);
-        alert('Erro ao processar o cancelamento.');
+    try {
+      const success = await cancelReservationService(id);
+      if (success) {
+        setReservations(prev => prev.map(res => 
+          res.id === id ? { ...res, status: 'Cancelada' as const } : res
+        ));
+        return true;
       }
+    } catch (error) {
+      console.error('Erro ao cancelar reserva:', error);
+      throw error; 
     }
-  };
-
-  const handleDelete = async (id: string) => {
-    if (confirm(`Tem certeza que deseja apagar a reserva ${id}? Esta ação não pode ser desfeita.`)) {
-      try {
-        const success = await deleteReservationService(id);
-        if (success) {
-          setReservations(prev => prev.filter(res => res.id !== id));
-        } else {
-          alert('Não foi possível apagar a reserva. Tente novamente.');
-        }
-      } catch (error) {
-        console.error('Erro ao apagar reserva:', error);
-        alert('Erro ao processar a exclusão.');
-      }
-    }
+    return false;
   };
 
   const filteredReservations = reservations.filter(res => {
@@ -128,6 +103,10 @@ export default function MinhasReservasPage() {
     if (filterStatus === 'CANCELLED') return ['Cancelada', 'CANCELADA'].includes(res.status);
     return true;
   });
+
+  const handleCheckIn = (data: ReservationCardProps) => {
+    navigate('/hospedagem', { state: { reservation: data } });
+  };
 
   return (
     <div className={styles.container}>
@@ -194,8 +173,7 @@ export default function MinhasReservasPage() {
               key={res.id}
               {...res}
               onCancel={handleCancel}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
+              onCheckIn={isManager ? handleCheckIn : undefined}
             />
           ))}
         </div>

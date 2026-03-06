@@ -14,6 +14,7 @@ import Rooms from './pages/RoomsListPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import NewRoomPage from './pages/NewRoomPage';
 import ProfilePage from './pages/ProfilePage';
+import { HospedagemFormPage } from './pages/HospedagemFormPage';
 
 function App() {
   return (
@@ -55,8 +56,10 @@ function App() {
             <Route path="/quartos" element={<Rooms />} />
             
             <Route path="/quartos/novo" element={<NewRoomPage />} />
-            
+            <Route path="/hospedagem" element={<HospedagemFormPage />} />
           </Route>
+          
+
         </Route>
       </Routes>
     </BrowserRouter>

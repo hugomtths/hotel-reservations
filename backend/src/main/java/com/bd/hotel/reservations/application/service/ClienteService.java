@@ -68,4 +68,15 @@ public class ClienteService {
 
         return toResponse(clienteRepository.save(cliente));
     }
+
+    @Transactional
+    public ClienteResponse buscarPorCpf(String cpf) {
+        Cliente cliente = buscarEntidadePorCpf(cpf);
+        return toResponse(cliente);
+    }
+
+    private Cliente buscarEntidadePorCpf(String cpf) {
+        return clienteRepo.findByCpf(cpf)
+                .orElseThrow(() -> new ClienteNotFoundException("Cliente não encontrado para o CPF: " + cpf));
+    }
 }

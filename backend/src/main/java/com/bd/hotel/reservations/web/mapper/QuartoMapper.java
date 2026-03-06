@@ -18,12 +18,12 @@ import java.util.Set;
 @Component
 public class QuartoMapper {
 
-    public Quarto toEntity(QuartoRequest request, Hotel hotel, Categoria categoria, Set<Comodidade> comodidades) {
-        if (request == null) {
-            return null;
-        }
-
-        // Usando o Builder que você definiu na entidade Quarto
+    public Quarto toEntity(
+            QuartoRequest request,
+            Hotel hotel,
+            Categoria categoria,
+            Set<Comodidade> comodidades
+    ) {
         return Quarto.builder()
                 .hotel(hotel)
                 .categoria(categoria)
@@ -37,34 +37,50 @@ public class QuartoMapper {
     public QuartoResponse toResponse(Quarto quarto) {
         Long hotelId = quarto.getHotel() != null ? quarto.getHotel().getId() : null;
 
-        CategoriaResponse categoriaResponse = null;
-        if (quarto.getCategoria() != null) {
-            Categoria categoria = quarto.getCategoria();
-            categoriaResponse = new CategoriaResponse(
-                    categoria.getId(),
-                    categoria.getNome(),
-                    categoria.getPrecoDiaria(),
-                    categoria.getCapacidade()
-            );
-        }
-
-        List<ComodidadeResponse> comodidadesResponse = quarto.getComodidades() == null
-                ? List.of()
-                : quarto.getComodidades().stream()
-                .map(comodidade -> new ComodidadeResponse(
-                        comodidade.getId(),
-                        comodidade.getNome()
-                ))
-                .toList();
-
         return new QuartoResponse(
                 quarto.getId(),
                 quarto.getNumero(),
                 quarto.getStatus(),
                 quarto.getArea(),
                 hotelId,
-                categoriaResponse,
-                comodidadesResponse
+                toCategoriaResponse(quarto.getCategoria()),
+                toComodidadeResponseList(quarto.getComodidades())
+        );
+    }
+
+    public List<QuartoResponse> toResponseList(List<Quarto> quartos) {
+        return quartos.stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    private CategoriaResponse toCategoriaResponse(Categoria categoria) {
+        if (categoria == null) {
+            return null;
+        }
+
+        return new CategoriaResponse(
+                categoria.getId(),
+                categoria.getNome(),
+                categoria.getPrecoDiaria(),
+                categoria.getCapacidade()
+        );
+    }
+
+    private List<ComodidadeResponse> toComodidadeResponseList(Set<Comodidade> comodidades) {
+        if (comodidades == null || comodidades.isEmpty()) {
+            return List.of();
+        }
+
+        return comodidades.stream()
+                .map(this::toComodidadeResponse)
+                .toList();
+    }
+
+    private ComodidadeResponse toComodidadeResponse(Comodidade comodidade) {
+        return new ComodidadeResponse(
+                comodidade.getId(),
+                comodidade.getNome()
         );
     }
 }

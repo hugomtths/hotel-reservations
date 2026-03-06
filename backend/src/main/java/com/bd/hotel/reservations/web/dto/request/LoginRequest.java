@@ -1,15 +1,12 @@
 package com.bd.hotel.reservations.web.dto.request;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
+import jakarta.validation.constraints.*;
 
-@Getter
-public class LoginRequest {
-    @Email(message = "Email deve ser válido")
-    @NotBlank(message = "Email é obrigatório")
-    private String email;
+public record LoginRequest(
+        @Email(message = "Email deve ser válido")
+        @NotBlank(message = "Email é obrigatório")
+        String email,
 
-    @NotBlank(message = "Senha é obrigatória")
-    private String password;
-}
+        @NotBlank(message = "Senha é obrigatória")
+        String password
+) {}

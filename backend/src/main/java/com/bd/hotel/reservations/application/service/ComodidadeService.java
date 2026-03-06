@@ -7,51 +7,54 @@ import com.bd.hotel.reservations.web.dto.request.ComodidadeRequest;
 import com.bd.hotel.reservations.web.dto.response.ComodidadeResponse;
 import com.bd.hotel.reservations.web.mapper.ComodidadeMapper;
 import lombok.RequiredArgsConstructor;
-
 import java.util.List;
-
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class ComodidadeService {
 
-    private final ComodidadeRepository repository;
-    private final ComodidadeMapper mapper;
+    private final ComodidadeRepository comodidadeRepository;
+    private final ComodidadeMapper comodidadeMapper;
 
+    @Transactional
     public ComodidadeResponse criar(ComodidadeRequest request) {
-        Comodidade comodidade = mapper.toEntity(request);
-        Comodidade salva = repository.save(comodidade);
-        return mapper.toResponse(salva);
+        Comodidade comodidade = comodidadeMapper.toEntity(request);
+        Comodidade salva = comodidadeRepository.save(comodidade);
+        return comodidadeMapper.toResponse(salva);
     }
 
+    @Transactional(readOnly = true)
     public List<ComodidadeResponse> listarTodas() {
-        List<Comodidade> comodidades = repository.findAll();
-        return mapper.toResponseList(comodidades);
+        List<Comodidade> comodidades = comodidadeRepository.findAll();
+        return comodidadeMapper.toResponseList(comodidades);
     }
 
+    @Transactional(readOnly = true)
     public ComodidadeResponse buscarPorId(Long id) {
-        Comodidade comodidade = repository.findById(id)
-                .orElseThrow(() -> new ComodidadeNotFoundException(id));
-        return mapper.toResponse(comodidade);
+        Comodidade comodidade = buscarEntidadePorId(id);
+        return comodidadeMapper.toResponse(comodidade);
     }
 
+    public Comodidade buscarEntidadePorId(Long id) {
+        return comodidadeRepository.findById(id)
+                .orElseThrow(() -> new ComodidadeNotFoundException(id));
+    }
+
+    @Transactional
     public ComodidadeResponse atualizar(Long id, ComodidadeRequest request) {
-        Comodidade comodidade = repository.findById(id)
-                .orElseThrow(() -> new ComodidadeNotFoundException(id));
+        Comodidade comodidade = buscarEntidadePorId(id);
 
-        comodidade.atualizarNome(request.getNome());
+        comodidade.atualizarNome(request.nome());
 
-        Comodidade salva = repository.save(comodidade);
-        return mapper.toResponse(salva);
+        Comodidade salva = comodidadeRepository.save(comodidade);
+        return comodidadeMapper.toResponse(salva);
     }
 
+    @Transactional
     public void deletar(Long id) {
-        if (!repository.existsById(id)) {
-            throw new ComodidadeNotFoundException(id);
-        }
-        repository.deleteById(id);
+        Comodidade comodidade = buscarEntidadePorId(id);
+        comodidadeRepository.delete(comodidade);
     }
-
-
 }

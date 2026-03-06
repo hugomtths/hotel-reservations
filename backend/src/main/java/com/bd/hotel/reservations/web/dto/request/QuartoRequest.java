@@ -4,33 +4,23 @@ import com.bd.hotel.reservations.persistence.enums.StatusQuarto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
 import java.util.Set;
 
-@Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class QuartoRequest {
-
+public record QuartoRequest(
     @NotNull(message = "O ID do hotel é obrigatório")
-    private Long hotelId;
+    Long hotelId,
 
     @NotNull(message = "O ID da categoria é obrigatório")
-    private Long categoriaId;
+    Long categoriaId,
 
     @NotBlank(message = "O número do quarto é obrigatório")
-    private String numero;
+    String numero,
 
-    private StatusQuarto status;
+    StatusQuarto status,
 
     @Positive(message = "A área deve ser maior que zero")
-    private BigDecimal area;
+    BigDecimal area,
 
-    private Set<Long> comodidadeIds;
-}
+    Set<Long> comodidadeIds
+) {}

@@ -16,37 +16,32 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoriaController {
 
-    private final CategoriaService service;
+    private final CategoriaService categoriaService;
 
-    // CREATE
     @PostMapping
     public ResponseEntity<CategoriaResponse> criar(@RequestBody @Valid CategoriaRequest request) {
-        CategoriaResponse response = service.criar(request);
+        CategoriaResponse response = categoriaService.criar(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // READ
     @GetMapping
     public ResponseEntity<List<CategoriaResponse>> listarTodas() {
-        return ResponseEntity.ok(service.listarTodas());
+        return ResponseEntity.ok(categoriaService.listarTodas());
     }
 
-    // READ by ID
     @GetMapping("/{id}")
     public ResponseEntity<CategoriaResponse> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(service.buscarPorId(id));
+        return ResponseEntity.ok(categoriaService.buscarPorId(id));
     }
 
-    // UPDATE
     @PutMapping("/{id}")
     public ResponseEntity<CategoriaResponse> atualizar(@PathVariable Long id, @RequestBody @Valid CategoriaRequest request) {
-        return ResponseEntity.ok(service.atualizar(id, request));
+        return ResponseEntity.ok(categoriaService.atualizar(id, request));
     }
 
-    // DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        service.deletar(id);
+        categoriaService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 }

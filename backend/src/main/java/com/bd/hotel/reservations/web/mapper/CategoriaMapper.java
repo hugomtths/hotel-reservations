@@ -12,19 +12,19 @@ public class CategoriaMapper {
 
     public Categoria toEntity(CategoriaRequest request) {
         return Categoria.builder()
-                .precoDiaria(request.getPrecoDiaria())
-                .nome(request.getNome())
-                .capacidade(request.getCapacidade())
+                .precoDiaria(request.precoDiaria())
+                .nome(request.nome())
+                .capacidade(request.capacidade())
                 .build();
     }
 
     public CategoriaResponse toResponse(Categoria entity) {
-        return CategoriaResponse.builder()
-                .id(entity.getId())
-                .precoDiaria(entity.getPrecoDiaria())
-                .nome(entity.getNome())
-                .capacidade(entity.getCapacidade())
-                .build();
+        return new CategoriaResponse(
+                entity.getId(),
+                entity.getNome(),
+                entity.getPrecoDiaria(),
+                entity.getCapacidade()
+        );
     }
 
     public List<CategoriaResponse> toResponseList(List<Categoria> entities) {

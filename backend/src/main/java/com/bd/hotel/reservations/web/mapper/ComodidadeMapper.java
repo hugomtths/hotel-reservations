@@ -13,15 +13,15 @@ public class ComodidadeMapper {
 
     public Comodidade toEntity(ComodidadeRequest request) {
         return Comodidade.builder()
-                .nome(request.getNome())
+                .nome(request.nome())
                 .build();
     }
 
     public ComodidadeResponse toResponse(Comodidade entity) {
-        return ComodidadeResponse.builder()
-                .id(entity.getId())
-                .nome(entity.getNome())
-                .build();
+        return new ComodidadeResponse(
+                entity.getId(),
+                entity.getNome()
+        );
     }
 
     public List<ComodidadeResponse> toResponseList(List<Comodidade> entities) {

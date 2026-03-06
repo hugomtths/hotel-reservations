@@ -16,37 +16,32 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ComodidadeController {
 
-    private final ComodidadeService service;
+    private final ComodidadeService comodidadeService;
 
-    // CREATE
     @PostMapping
     public ResponseEntity<ComodidadeResponse> criar(@RequestBody @Valid ComodidadeRequest request) {
-        ComodidadeResponse response = service.criar(request);
+        ComodidadeResponse response = comodidadeService.criar(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // READ
     @GetMapping
     public ResponseEntity<List<ComodidadeResponse>> listarTodas() {
-        return ResponseEntity.ok(service.listarTodas());
+        return ResponseEntity.ok(comodidadeService.listarTodas());
     }
 
-    // READ by ID
     @GetMapping("/{id}")
     public ResponseEntity<ComodidadeResponse> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(service.buscarPorId(id));
+        return ResponseEntity.ok(comodidadeService.buscarPorId(id));
     }
 
-    // UPDATE
     @PutMapping("/{id}")
     public ResponseEntity<ComodidadeResponse> atualizar(@PathVariable Long id, @RequestBody @Valid ComodidadeRequest request) {
-        return ResponseEntity.ok(service.atualizar(id, request));
+        return ResponseEntity.ok(comodidadeService.atualizar(id, request));
     }
 
-    // DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        service.deletar(id);
+        comodidadeService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 }

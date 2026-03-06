@@ -22,6 +22,12 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.buscarPorIdUsuario(userDetails.getId()));
     }
 
+    @GetMapping("/cpf/{cpf}")
+    public ResponseEntity<ClienteResponse> buscarPorCpf(@PathVariable String cpf) {
+        ClienteResponse cliente = clienteService.buscarPorCpf(cpf);
+        return ResponseEntity.ok(cliente);
+    }
+
     @PutMapping("/me")
     public ResponseEntity<ClienteResponse> updateMyProfile(
             @AuthenticationPrincipal AuthUserDetails userDetails,

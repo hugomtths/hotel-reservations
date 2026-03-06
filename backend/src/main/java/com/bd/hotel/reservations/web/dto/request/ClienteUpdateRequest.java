@@ -18,12 +18,9 @@ public record ClienteUpdateRequest(
     @NotNull(message = "A data de nascimento é obrigatória")
     LocalDate dataNascimento,
 
-<<<<<<< Updated upstream
-=======
     @NotBlank(message = "O CPF é obrigatório")
     String cpf,
 
->>>>>>> Stashed changes
     @NotBlank(message = "O e-mail é obrigatório")
     @Email(message = "E-mail inválido")
     String email

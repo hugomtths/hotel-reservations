@@ -235,6 +235,107 @@
   
   .priceCard {
     position: static;
-    order: -1; /* Mostra o resumo do preço primeiro no mobile se desejar */
+    order: -1; 
   }
+}
+
+.customSelectContainer {
+  position: relative;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.customSelectTrigger {
+  padding: 0.8rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #1e293b;
+  font-weight: 500;
+}
+
+.customSelectTrigger:hover {
+  border-color: #94a3b8;
+  background-color: #f8fafc;
+}
+
+.customSelectTrigger.open {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.customOptionsList {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.optionItemSimple {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  gap: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.optionItemSimple:last-child {
+  border-bottom: none;
+}
+
+.optionItemSimple:hover {
+  background-color: #f1f5f9;
+}
+
+.optionItemSimple input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #2563eb;
+  cursor: pointer;
+}
+
+.optionText {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+.serviceName {
+  color: #334155;
+  font-weight: 500;
+}
+
+.servicePrice {
+  color: #059669;
+  font-weight: 600;
+}
+
+.sectionSubtitle {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-bottom: 0.5rem;
+}
+
+.priceRow span:last-child {
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.priceRow.servicesRow {
+  color: #059669; 
 }

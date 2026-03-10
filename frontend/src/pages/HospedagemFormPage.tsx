@@ -19,7 +19,10 @@ import {
   getQuartosDisponiveis, 
   getClienteByCpf, 
   createHospedagem,
-  getServicosAdicionais, // <--- Novo endpoint importado
+  getServicosAdicionais,
+  createServicoAdicional,
+  updateServicoAdicional,
+  deleteServicoAdicional,
   type CriarHospedagemRequest,
   type QuartoDisponivel 
 } from '../services/hostingService';
@@ -38,10 +41,37 @@ export const HospedagemFormPage: React.FC = () => {
   // --- Estados dos Serviços Adicionais ---
   // Inicia vazio, será preenchido pelo useEffect
   const [servicosDisponiveis, setServicosDisponiveis] = useState<AdditionalServiceData[]>([]);
-  const [selectedServices, setSelectedServices] = useState<number[]>([]);
+  const [selectedServices, setSelectedServices] = useState<number[]>(
+    reservationData?.servicosAdicionaisIds || []
+  );
   const [isServiceDropdownOpen, setIsServiceDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [serviceToEdit, setServiceToEdit] = useState<AdditionalServiceData | null>(null);
+
+  /// --- Formatação de Data ---
+  const formatarDataParaInput = (dataStr: string | undefined) => {
+    if (!dataStr) return '';
+    
+    if (dataStr.includes('-') && dataStr.split('-')[0].length === 4) {
+      return dataStr.split('T')[0];
+    }
+    
+    if (dataStr.includes('/')) {
+      const [dia, mes, ano] = dataStr.split('/');
+      return `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`;
+    }
+    
+    try {
+      const d = new Date(dataStr);
+      if (!isNaN(d.getTime())) {
+        return d.toISOString().split('T')[0];
+      }
+    } catch (e) {
+      console.log("Erro ao converter data:", dataStr);
+    }
+    
+    return '';
+  };
 
   // --- Estado do Formulário ---
   const [formData, setFormData] = useState({
@@ -49,8 +79,8 @@ export const HospedagemFormPage: React.FC = () => {
     nome: reservationData?.clientName || '',
     reservaId: reservationData?.id || '',
     quartoId: reservationData?.roomId || '',
-    dataEntrada: new Date().toISOString().split('T')[0],
-    dataSaida: reservationData?.endDate || '',
+    dataEntrada: reservationData ? formatarDataParaInput(reservationData.startDate) : new Date().toISOString().split('T')[0],
+    dataSaida: reservationData ? formatarDataParaInput(reservationData.endDate) : '',
     metodoPagamento: '',
   });
 
@@ -70,7 +100,7 @@ export const HospedagemFormPage: React.FC = () => {
 
   // Define o valor da diária com base na reserva ou no quarto escolhido
   const precoDiaria = isFromReservation 
-    ? (Number(reservationData.totalValue) / calcularNoites(reservationData.startDate, reservationData.endDate))
+    ? Number(reservationData.pricePerNight) || 0
     : (quartosDisponiveis.find(q => q.id === Number(formData.quartoId))?.preco || 0);
 
   const valorHospedagem = noites * precoDiaria;
@@ -162,17 +192,16 @@ export const HospedagemFormPage: React.FC = () => {
   const handleSaveService = async (data: AdditionalServiceData) => {
     try {
       if (serviceToEdit) {
-        // Se você tiver um endpoint PUT, coloque aqui: await api.put(`/servicos-adicionais/${serviceToEdit.id}`, data)
-        setServicosDisponiveis(prev => prev.map(s => s.id === serviceToEdit.id ? { ...data, id: s.id } : s));
+        const servicoAtualizado = await updateServicoAdicional(serviceToEdit.id!, data);
+        setServicosDisponiveis(prev => prev.map(s => s.id === serviceToEdit.id ? servicoAtualizado : s));
         toast.success("Serviço atualizado!");
       } else {
-        // Se você tiver um endpoint POST, coloque aqui: const res = await api.post(`/servicos-adicionais`, data)
-        const novoServico = { ...data, id: Date.now() }; // Use res.data se tiver backend
-        setServicosDisponiveis([...servicosDisponiveis, novoServico]);
-        toast.success("Serviço cadastrado!");
+        const novoServicoDoBanco = await createServicoAdicional(data);
+        setServicosDisponiveis([...servicosDisponiveis, novoServicoDoBanco]);
+        toast.success("Serviço cadastrado com sucesso!");
       }
     } catch (error) {
-      toast.error("Erro ao salvar serviço.");
+      toast.error("Erro ao comunicar com o servidor para salvar serviço.");
     } finally {
       setIsModalOpen(false);
       setServiceToEdit(null);
@@ -181,11 +210,14 @@ export const HospedagemFormPage: React.FC = () => {
 
   // Handler de Excluir Serviço Adicional
   const handleDeleteService = async (id: number) => {
+    if (!window.confirm("Tem certeza que deseja apagar este serviço do sistema?")) return;
+
     try {
-      // Se você tiver um endpoint DELETE, coloque aqui: await api.delete(`/servicos-adicionais/${id}`)
+      await deleteServicoAdicional(id);
+      
       setServicosDisponiveis(prev => prev.filter(s => s.id !== id));
       setSelectedServices(prev => prev.filter(sid => sid !== id));
-      toast.success("Serviço removido");
+      toast.success("Serviço removido permanentemente");
     } catch (error) {
       toast.error("Erro ao remover serviço.");
     }
@@ -217,10 +249,17 @@ export const HospedagemFormPage: React.FC = () => {
     try {
       await createHospedagem(payload);
       toast.success("Hospedagem iniciada com sucesso!");
-      navigate('/home/reservas'); 
-    } catch (error) {
+      navigate('/hospedagens'); 
+    } catch (error: any) {
       console.log("Erro ao salvar hospedagem", error);
-      toast.error("Erro ao salvar hospedagem.");
+      
+      const mensagemBackend = error.response?.data?.message || error.response?.data;
+      
+      const mensagemErro = typeof mensagemBackend === 'string' 
+        ? mensagemBackend 
+        : "Não foi possível realizar o check-in. Verifique se esta reserva já possui uma hospedagem ativa.";
+        
+      toast.error(mensagemErro);
     }
   };
 
@@ -434,7 +473,7 @@ export const HospedagemFormPage: React.FC = () => {
             <ArrowLeft size={18} /> Voltar
           </button>
           <button type="submit" className={styles.confirmBtn}>
-            <CheckCircle size={18} /> Finalizar Hospedagem
+            <CheckCircle size={18} /> Realizar Hospedagem
           </button>
         </div>
       </form>

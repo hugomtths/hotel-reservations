@@ -70,8 +70,16 @@ const ReservationConfirm = () => {
     );
   }
 
-  const dateIn = new Date(checkIn);
-  const dateOut = new Date(checkOut);
+  const parseDate = (dateStr: string) => {
+    if (dateStr.includes('/')) {
+      const [day, month, year] = dateStr.split('/');
+      return new Date(Number(year), Number(month) - 1, Number(day));
+    }
+    return new Date(dateStr);
+  };
+
+  const dateIn = parseDate(checkIn);
+  const dateOut = parseDate(checkOut);
   const diffTime = Math.abs(dateOut.getTime() - dateIn.getTime());
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
@@ -90,12 +98,20 @@ const ReservationConfirm = () => {
     setIsSubmitting(true);
     const token = localStorage.getItem('token');
 
+    const formatToISO = (dateStr: string) => {
+      if (dateStr.includes('/')) {
+        const [day, month, year] = dateStr.split('/');
+        return `${year}-${month}-${day}`;
+      }
+      return dateStr; // Já está no formato correto
+    };
+
     // Lembrete: Se você ajustou o JWT Decoder, o ID do cliente deve ser adicionado aqui!
     const reservationData = {
-      dataCheckinPrevisto: checkIn,
-      dataCheckoutPrevisto: checkOut,
+      dataCheckinPrevisto: formatToISO(checkIn),
+      dataCheckoutPrevisto: formatToISO(checkOut),
       quartoId: room.id,
-      servicosAdicionaisIds: selectedServices // Enviando os serviços escolhidos
+      servicoIds: selectedServices // Enviando os serviços escolhidos
     };
 
     if (!token) {
@@ -220,8 +236,12 @@ const ReservationConfirm = () => {
               alt="Quarto" 
             />
             <div className={styles.roomMeta}>
-              <span className={styles.categoryBadge}>{room.type}</span>
-              <h3>{room.description}</h3>
+              <h3>{room.description || `Quarto n° ${room.numero}`}</h3>
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '4px' }}>
+                <span className={styles.categoryBadge}>
+                  {room.type || room?.categoria?.nome}
+                </span>
+              </div>
             </div>
           </div>
 

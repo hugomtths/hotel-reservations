@@ -3,17 +3,24 @@ package com.bd.hotel.reservations.application.service;
 import com.bd.hotel.reservations.persistence.entity.*;
 import com.bd.hotel.reservations.persistence.repository.*;
 import com.bd.hotel.reservations.web.dto.request.HospedagemRequest;
+import com.bd.hotel.reservations.web.dto.response.HospedagemResponse;
+import com.bd.hotel.reservations.web.mapper.HospedagemMapper;
+import com.bd.hotel.reservations.persistence.enums.StatusReserva;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class HospedagemService {
 
     private final HospedagemRepository hospedagemRepo;
+    private final HospedagemMapper hospedagemMapper;
     private final ReservaRepository reservaRepo;
     private final ClienteRepository clienteRepo;
     private final QuartoRepository quartoRepo;
@@ -57,8 +64,16 @@ public class HospedagemService {
 
         if (reserva != null) {
             reserva.setHospedagem(hospedagem);
+            reserva.setStatusReserva(StatusReserva.CONCLUIDA);
         }
 
         return hospedagemRepo.save(hospedagem);
+    }
+
+    @Transactional(readOnly = true)
+    public List<HospedagemResponse> listarTodas() {
+        return hospedagemRepo.findAll().stream()
+                .map(h -> hospedagemMapper.toResponse(h, "email-nao-informado@hotel.com"))
+                .collect(Collectors.toList());
     }
 }

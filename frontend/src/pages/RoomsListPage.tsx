@@ -54,11 +54,24 @@ const Rooms: React.FC = () => {
       await deleteRoomService(roomToDelete);
       setRooms(prev => prev.filter(room => room.id !== roomToDelete));
       toast.success("Quarto excluído com sucesso!");
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message, { duration: 5000 });
+    } catch (error: any) {
+      let errorMessage = "Erro inesperado ao excluir o quarto.";
+      
+      if (error.response?.data?.detail) {
+        errorMessage = error.response.data.detail;
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      }
+
+      if (errorMessage.includes("integridade") || errorMessage.includes("Operação não permitida")) {
+        toast.error(
+          "Não é possível excluir este quarto. Ele possui reservas ou hospedagens vinculadas a ele no sistema.", 
+          { duration: 5000 }
+        );
       } else {
-        toast.error("Erro inesperado ao excluir o quarto.", { duration: 5000 });
+        toast.error(errorMessage, { duration: 5000 });
       }
     } finally {
       setRoomToDelete(null);

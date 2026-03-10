@@ -348,21 +348,11 @@ O projeto utiliza gatilhos diretamente no Banco de Dados para garantir que regra
 
 ### Como testar o Trigger
 
-#### **A. Teste via Banco de Dados (SQL)**
-
-Tente executar a exclusão diretamente via terminal:
-
-```sql
--- Tente deletar um quarto que possua reserva confirmada
-DELETE FROM quarto WHERE id = 1;
--- Resultado esperado:
--- ERROR: Não é possível excluir o quarto [NÚMERO]. Ele possui reservas ativas (CONFIRMADA).
-```
-#### **B. Teste via Frontend / Interface**
+Teste via Frontend / Interface**
 1. Acesse o painel de **Gerenciamento de Quartos**.
 2. Tente excluir um quarto que já possua uma reserva confirmada.
 3. **Resultado esperado:** O sistema bloqueará a exclusão e exibirá um alerta (Toast) com a mensagem:
-   > *"Não é possível excluir este quarto, pois ele possui reservas ativas (CONFIRMADA) vinculadas a ele."*
+   > *"Não foi possível realizar o check-in. Verifique se esta reserva já possui uma hospedagem ativa.*
 ---
 
 ## Guia de Contribuição

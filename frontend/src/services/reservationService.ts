@@ -5,6 +5,7 @@ export const getDetailedReservations = async (email?: string): Promise<Reservati
   try {
     const url = email ? `/reservas/detalhadas?email=${email}` : '/reservas/detalhadas';
     const response = await api.get<ReservationCardProps[]>(url);
+    console.log("DADOS REAIS DO BACKEND (Todas):", response.data[0]);
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar reservas detalhadas:', error);
@@ -16,6 +17,7 @@ export const getReservationsByEmail = async (email?: string): Promise<Reservatio
   try {
     const url = email ? `/reservas/detalhadas?email=${email}` : '/reservas/detalhadas';
     const response = await api.get<ReservationCardProps[]>(url);
+    console.log("DADOS REAIS DO BACKEND (Por Email):", response.data[0]);
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar reservas:', error);

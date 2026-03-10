@@ -20,6 +20,7 @@ export interface ClienteUpdateRequest {
     telefone: string;
     dataNascimento: string; // YYYY-MM-DD
     email: string;
+    cpf: string;
 }
 
 export const updateMyProfile = async (data: ClienteUpdateRequest): Promise<ClienteProfile> => {

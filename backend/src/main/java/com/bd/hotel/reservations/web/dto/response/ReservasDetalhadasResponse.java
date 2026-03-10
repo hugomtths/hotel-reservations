@@ -1,6 +1,7 @@
 package com.bd.hotel.reservations.web.dto.response;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public record ReservasDetalhadasResponse(
         String id,
@@ -17,5 +18,6 @@ public record ReservasDetalhadasResponse(
         BigDecimal totalValue,
         String stayDuration,
         String startDate,
-        String endDate
+        String endDate,
+        List<Long> servicosAdicionaisIds
 ) {}

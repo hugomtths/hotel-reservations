@@ -53,7 +53,8 @@ public class ReservaDetalhadaMapper {
                 totalValue,
                 nights + " Noites",
                 formatDate(start),
-                formatDate(end)
+                formatDate(end),
+                extrairServicosIds(servicos)
         );
     }
 
@@ -159,5 +160,18 @@ public class ReservaDetalhadaMapper {
 
     private String formatDate(LocalDate d) {
         return d == null ? null : d.format(BR_DATE);
+    }
+
+    private java.util.List<Long> extrairServicosIds(JsonNode servicos) {
+        java.util.List<Long> ids = new java.util.ArrayList<>();
+        if (servicos != null && servicos.isArray()) {
+            for (JsonNode s : servicos) {
+                JsonNode idNode = s.get("servico_adicional_id"); 
+                if (idNode != null && !idNode.isNull()) {
+                    ids.add(idNode.asLong());
+                }
+            }
+        }
+        return ids;
     }
 }

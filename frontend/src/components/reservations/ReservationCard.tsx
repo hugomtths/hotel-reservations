@@ -18,6 +18,7 @@ export interface ReservationCardProps {
   startDate: string;
   endDate: string;
   roomId?: number;
+  servicosAdicionaisIds?: number[];
   onCancel?: (id: string) => void;
   onCheckIn?: (data: any) => void;
 }

@@ -15,6 +15,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 import NewRoomPage from './pages/NewRoomPage';
 import ProfilePage from './pages/ProfilePage';
 import { HospedagemFormPage } from './pages/HospedagemFormPage';
+import GerenciarHospedagensPage from './pages/GerenciarHospedagensPage';
 
 function App() {
   return (
@@ -60,6 +61,7 @@ function App() {
             
             <Route path="/quartos/novo" element={<NewRoomPage />} />
             <Route path="/hospedagem" element={<HospedagemFormPage />} />
+            <Route path="/hospedagens" element={<GerenciarHospedagensPage />} />
           </Route>
           
 

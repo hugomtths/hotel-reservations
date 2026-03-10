@@ -1,6 +1,5 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { 
   TrendingUp, 
   CalendarCheck, 
@@ -15,25 +14,19 @@ import {
 import styles from './RelatorioPage.module.css';
 
 import { relatorioService, type RelatorioData } from '../services/relatorioService';
-import { getDetailedReservations, cancelReservationService, deleteReservationService } from '../services/reservationService';
-import ReservationCard, { type ReservationCardProps } from '../components/reservations/ReservationCard';
 
 const RelatorioPage: React.FC = () => {
-  const navigate = useNavigate();
   const [dados, setDados] = useState<RelatorioData | null>(null);
-  const [reservations, setReservations] = useState<ReservationCardProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState<string | null>(null);
 
   useEffect(() => {
     const buscarDados = async () => {
       try {
-        const [relatorio, listaReservas] = await Promise.all([
-          relatorioService.obterRelatorioGeral(),
-          getDetailedReservations()
+        const [relatorio] = await Promise.all([
+          relatorioService.obterRelatorioGeral()
         ]);
         setDados(relatorio);
-        setReservations(listaReservas);
       } catch (error) {
         setErro('Erro ao carregar o relatório e dados.' + error);
       } finally {
@@ -43,51 +36,6 @@ const RelatorioPage: React.FC = () => {
 
     buscarDados();
   }, []);
-  
-  const handleEdit = (id: string) => {
-    const reservation = reservations.find(r => r.id === id);
-    if (reservation) {
-      navigate(`/reserva/editar/${id}`, { state: reservation });
-    }
-  };
-
-  const handleCancel = async (id: string) => {
-    if (confirm(`Tem certeza que deseja cancelar a reserva ${id}?`)) {
-      try {
-        const success = await cancelReservationService(id);
-        if (success) {
-          setReservations(prev => prev.map(res => 
-            res.id === id ? { ...res, status: 'Cancelada' as const } : res
-          ));
-          const novoRelatorio = await relatorioService.obterRelatorioGeral();
-          setDados(novoRelatorio);
-        } else {
-          alert('Não foi possível cancelar a reserva. Tente novamente.');
-        }
-      } catch (error) {
-        console.error('Erro ao cancelar reserva:', error);
-        alert('Erro ao processar o cancelamento.');
-      }
-    }
-  };
-
-  const handleDelete = async (id: string) => {
-    if (confirm(`Tem certeza que deseja apagar a reserva ${id}? Esta ação não pode ser desfeita.`)) {
-      try {
-        const success = await deleteReservationService(id);
-        if (success) {
-          setReservations(prev => prev.filter(res => res.id !== id));
-          const novoRelatorio = await relatorioService.obterRelatorioGeral();
-          setDados(novoRelatorio);
-        } else {
-          alert('Não foi possível apagar a reserva. Tente novamente.');
-        }
-      } catch (error) {
-        console.error('Erro ao apagar reserva:', error);
-        alert('Erro ao processar a exclusão.');
-      }
-    }
-  };
 
   if (loading) return <div className={styles.container}>Carregando métricas...</div>;
   if (erro) return <div className={styles.container}>{erro}</div>;
@@ -240,25 +188,6 @@ const RelatorioPage: React.FC = () => {
             <span className={styles.metricLabel}>gasto médio por cliente</span>
           </div>
         </div>
-      </div>
-
-      <div style={{ marginTop: '3rem' }}>
-        <h2 className={styles.title} style={{ fontSize: '1.5rem', marginBottom: '1.5rem' }}>Detalhes das Reservas</h2>
-        {reservations.length > 0 ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {reservations.map(res => (
-              <ReservationCard 
-                key={res.id}
-                {...res}
-                onCancel={handleCancel}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-              />
-            ))}
-          </div>
-        ) : (
-          <p className={styles.subtitle}>Nenhuma reserva encontrada para exibir.</p>
-        )}
       </div>
     </div>
   );

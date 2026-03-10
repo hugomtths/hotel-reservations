@@ -2,12 +2,14 @@ package com.bd.hotel.reservations.application.service;
 
 import com.bd.hotel.reservations.exception.business.InvalidDateException;
 import com.bd.hotel.reservations.exception.notfound.ReservaNotFoundException;
+import com.bd.hotel.reservations.exception.notfound.ServicoAdicionalNotFoundException;
 import com.bd.hotel.reservations.persistence.entity.Cliente;
 import com.bd.hotel.reservations.persistence.entity.Quarto;
 import com.bd.hotel.reservations.persistence.entity.Reserva;
 import com.bd.hotel.reservations.persistence.enums.StatusReserva;
 import com.bd.hotel.reservations.persistence.repository.ReservaRepository;
 import com.bd.hotel.reservations.persistence.repository.ReservasDetalhadasViewRepository;
+import com.bd.hotel.reservations.persistence.repository.ServicoAdicionalRepository;
 import com.bd.hotel.reservations.web.dto.request.ReservaRequest;
 import com.bd.hotel.reservations.web.dto.request.ReservasDetalhadasViewRowDto;
 import com.bd.hotel.reservations.web.dto.response.ReservaResponse;
@@ -34,6 +36,7 @@ public class ReservaService {
     private final ReservasDetalhadasViewRepository reservasDetalhadasViewRepository;
     private final ReservaMapper reservaMapper;
     private final ReservaDetalhadaMapper reservaDetalhadaMapper;
+    private final ServicoAdicionalRepository servicoAdicionalRepository;
 
     @Transactional(readOnly = true)
     public List<ReservasDetalhadasResponse> listarReservasDetalhadas() {
@@ -61,7 +64,24 @@ public class ReservaService {
         reserva.setDataCheckoutPrevisto(request.dataCheckoutPrevisto());
         reserva.setStatusReserva(StatusReserva.CONFIRMADA);
 
-        return reservaMapper.toResponse(reservaRepository.save(reserva));
+        reserva = reservaRepository.save(reserva);
+
+        if (request.servicoIds() != null && !request.servicoIds().isEmpty()) {
+            for (Long servicoId : request.servicoIds()) {
+                com.bd.hotel.reservations.persistence.entity.ServicoAdicional servico = 
+                        servicoAdicionalRepository.findById(servicoId)
+                        .orElseThrow(() -> new ServicoAdicionalNotFoundException(servicoId));
+
+                com.bd.hotel.reservations.persistence.entity.ReservaServico reservaServico = 
+                        new com.bd.hotel.reservations.persistence.entity.ReservaServico(reserva, servico, 1L);
+                
+                reserva.getServicos().add(reservaServico);
+            }
+        
+            reserva = reservaRepository.save(reserva);
+        }
+
+        return reservaMapper.toResponse(reserva);
     }
 
     @Transactional

@@ -3,7 +3,12 @@ package com.bd.hotel.reservations.web.controller;
 import com.bd.hotel.reservations.application.service.HospedagemService;
 import com.bd.hotel.reservations.persistence.entity.Hospedagem;
 import com.bd.hotel.reservations.web.dto.request.HospedagemRequest;
+import com.bd.hotel.reservations.web.dto.response.HospedagemResponse;
+
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,5 +22,10 @@ public class HospedagemController {
     @PostMapping
     public ResponseEntity<Hospedagem> criar(@RequestBody HospedagemRequest dto) {
         return ResponseEntity.ok(hospedagemService.salvarHospedagem(dto));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<HospedagemResponse>> listar() {
+        return ResponseEntity.ok(hospedagemService.listarTodas());
     }
 }

@@ -87,6 +87,12 @@ const HomePage = () => {
 
   const today = new Date().toISOString().split('T')[0];
 
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "";
+    const [year, month, day] = dateString.split("-");
+    return `${day}/${month}/${year}`;
+  };
+
   return (
     <div className={styles.homeContainer}>
       <section className={styles.heroSection}>
@@ -186,9 +192,12 @@ const HomePage = () => {
                 id={room.id}
                 type={room.tipo} 
                 description={`Quarto n°${room.numero}`} 
-                checkIn={booking.checkIn} 
-                checkOut={booking.checkOut}
-                price={`R$ ${room.preco} / noite`}
+                checkIn={formatDate(booking.checkIn)} 
+                checkOut={formatDate(booking.checkOut)}
+                price={new Intl.NumberFormat('pt-BR', { 
+                  style: 'currency', 
+                  currency: 'BRL' 
+                }).format(room.preco) + " / noite"}
                 image={room.image || "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=600&q=80"}
               />
             ))}

@@ -67,11 +67,53 @@ export const getServicosAdicionais = async (): Promise<ServicoAdicional[]> => {
     return response.data;
 };
 
+export const createServicoAdicional = async (dados: { nomeServico: string; descricao: string; preco: number }) => {
+  const token = localStorage.getItem('token');
+  const response = await fetch('http://localhost:8080/servicos-adicionais', { 
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(dados),
+  });
+  if (!response.ok) throw new Error('Erro ao criar serviço');
+  return response.json(); 
+};
+
+export const updateServicoAdicional = async (id: number, dados: { nomeServico: string; descricao: string; preco: number }) => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`http://localhost:8080/servicos-adicionais/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(dados),
+  });
+  if (!response.ok) throw new Error('Erro ao atualizar serviço');
+  return response.json();
+};
+
+export const deleteServicoAdicional = async (id: number) => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`http://localhost:8080/servicos-adicionais/${id}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+  if (!response.ok) throw new Error('Erro ao deletar serviço');
+};
+
 /**
  * Cria a hospedagem
  */
 export const createHospedagem = async (data: CriarHospedagemRequest): Promise<any> => {
     console.log(data)
     const response = await api.post('/hospedagens', data);
+    return response.data;
+};
+
+export const getHospedagens = async (): Promise<any[]> => {
+    const response = await api.get('/hospedagens');
     return response.data;
 };

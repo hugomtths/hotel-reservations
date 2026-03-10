@@ -4,6 +4,7 @@ import { getUserRole } from '../services/authService';
 import { getMyProfile, updateMyProfile, getMyFuncionarioProfile, updateMyFuncionarioProfile, type ClienteProfile, type ClienteUpdateRequest, type FuncionarioProfile, type FuncionarioUpdateRequest } from '../services/clienteService';
 import { TriangleAlert } from 'lucide-react';
 import styles from './ProfilePage.module.css';
+import toast from 'react-hot-toast';
 
 // Interface unificada para o estado do componente
 interface UserProfile extends Partial<ClienteProfile>, Partial<FuncionarioProfile> {
@@ -32,6 +33,7 @@ const ProfilePage: React.FC = () => {
     telefone: '',
     dataNascimento: '',
     email: '',
+    cpf: '',
   });
   const navigate = useNavigate();
 
@@ -57,6 +59,7 @@ const ProfilePage: React.FC = () => {
           telefone: data.telefone || '',
           dataNascimento: data.dataNascimento || '',
           email: data.email,
+          cpf: data.cpf || ''
         });
       } catch (err) {
         console.error('Erro ao carregar perfil:', err);
@@ -86,6 +89,7 @@ const ProfilePage: React.FC = () => {
         telefone: profile.telefone || '',
         dataNascimento: profile.dataNascimento || '',
         email: profile.email,
+        cpf: profile.cpf || ''
       });
     }
   };
@@ -97,9 +101,16 @@ const ProfilePage: React.FC = () => {
 
   const handleSave = async () => {
     if (!profile) return;
+
+    if (!formData.nome || !formData.email) {
+      return toast.error("Nome e E-mail são obrigatórios.");
+    }
+    if (role !== 'FUNCIONARIO' && (!formData.telefone || !formData.dataNascimento)) {
+      return toast.error("Telefone e Data de Nascimento são obrigatórios.");
+    }
+
     try {
       setLoading(true);
-      
       let updatedProfile: UserProfile;
 
       if (role === 'FUNCIONARIO') {
@@ -112,23 +123,48 @@ const ProfilePage: React.FC = () => {
       } else {
         const updateData: ClienteUpdateRequest = {
           nome: formData.nome,
-          telefone: formData.telefone || '',
-          dataNascimento: formData.dataNascimento || '',
-          email: formData.email
+          telefone: formData.telefone!,
+          dataNascimento: formData.dataNascimento!,
+          email: formData.email,
+          cpf: profile.cpf
         };
+
         const result = await updateMyProfile(updateData);
         updatedProfile = result as UserProfile;
       }
 
       setProfile(updatedProfile);
       setIsEditing(false);
-      alert('Perfil atualizado com sucesso!');
-    } catch (err) {
+      toast.success('Perfil atualizado com sucesso!');
+
+      const emailMudou = formData.email !== profile.email;
+      if (emailMudou) {
+        toast('Por segurança, faça login com seu novo e-mail.', { icon: '🔒' });
+        setTimeout(() => {
+          handleLogout();
+        }, 2500);
+      }
+      
+    } catch (err: any) {
       console.error('Erro ao atualizar perfil:', err);
-      alert('Erro ao atualizar perfil. Verifique os dados e tente novamente.');
+      const msgErro = err.response?.data?.detail || err.response?.data?.message || 'Erro ao atualizar perfil. Verifique os dados.';
+      toast.error(msgErro);
     } finally {
       setLoading(false);
     }
+  };
+
+  // Formata o CPF apenas para exibição (000.000.000-00)
+  const formatCPF = (cpf: string | undefined) => {
+    if (!cpf) return 'Não disponível';
+    
+    const numericCpf = cpf.replace(/\D/g, '');
+    
+    if (numericCpf.length === 11) {
+      return numericCpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+    }
+    
+    return cpf;
   };
 
   if (loading) return <div className={styles.container}>Carregando...</div>;
@@ -156,7 +192,7 @@ const ProfilePage: React.FC = () => {
 
         <div className={styles.infoGroup}>
           <label className={styles.label}>CPF</label>
-          <div className={`${styles.value} ${styles.readOnly}`}>{profile?.cpf || 'Não disponível'}</div>
+          <div className={`${styles.value} ${styles.readOnly}`}>{formatCPF(profile?.cpf)}</div>
         </div>
 
         {role !== 'FUNCIONARIO' && (

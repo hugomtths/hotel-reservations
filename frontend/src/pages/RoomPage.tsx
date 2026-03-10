@@ -105,7 +105,10 @@ const RoomPage = () => {
 
           <div className={styles.priceAction}>
             <span className={styles.price}>
-              R$ {room.categoria.precoDiaria.toFixed(2)} / noite
+              {new Intl.NumberFormat('pt-BR', { 
+                style: 'currency', 
+                currency: 'BRL' 
+              }).format(room.categoria.precoDiaria)} / noite
             </span>
             <button 
               className={styles.bookButton} 
